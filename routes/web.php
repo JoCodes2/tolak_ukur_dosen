@@ -11,6 +11,10 @@ Route::get('/user', function () {
     return view('admin.user');
 });
 
+// pages
+Route::get('/prodi', function () {
+    return view('pages.prodi');
+});
 // route api
 Route::prefix('sicici')->group(function () {
     Route::prefix('prodi')->controller(ProdiController::class)->group(function () {
