@@ -48,7 +48,7 @@
 
         <li class="menu-item {{ request()->is('prodi*') ? 'active' : '' }}">
             <a href="/prodi" class="menu-link">
-                <i class="menu-icon fa-solid fa-university"></i>
+                <i class="menu-icon fa-solid fa-graduation-cap"></i>
                 <div data-i18n="Program Studi">Program Studi</div>
             </a>
         </li>

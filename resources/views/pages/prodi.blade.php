@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 
-    <x-base-header title="Manajemen Program Studi" icon="fa-solid fa-university">
+    <x-base-header title="Manajemen Program Studi" icon="fa-solid fa-graduation-cap ">
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-primary btn-sm" id="btnTambahProdi">
                 <i class="fa fa-plus"></i> Tambah Program Studi
@@ -12,19 +12,17 @@
     </x-base-header>
 
     <x-base-body>
-        <div class="alert alert-secondary border-0 small mb-4">
+        <div class="alert alert-info border-0 small mb-4">
             <i class="fa-solid fa-circle-info me-1"></i>
             Halaman ini digunakan untuk mengelola data master Program Studi pada STMIK Adhi Guna.
         </div>
 
         @php
-            // Menyesuaikan header tabel dengan field database
             $headers = ['No', 'Kode Prodi', 'Nama Program Studi', 'Aksi'];
         @endphp
 
         <x-base-table :headers="$headers" id="prodiTable">
             <tbody id="prodiBody">
-                {{-- Data akan di-load via AJAX oleh prodi.controller.js --}}
             </tbody>
         </x-base-table>
     </x-base-body>

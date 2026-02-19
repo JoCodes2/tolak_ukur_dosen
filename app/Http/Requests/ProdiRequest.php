@@ -23,12 +23,13 @@ class ProdiRequest extends FormRequest
      */
     public function rules(): array
     {
-        $isUpdate = $this->route('id') !== null;
+        $id = $this->route('id') ?? $this->input('id');
 
         return [
-            'kode_prodi' => $isUpdate
-                ? 'required'
-                : 'required|unique:prodi,kode_prodi',
+            'kode_prodi' => [
+                'required',
+                $id ? 'unique:program_studi,kode_prodi,' . $id : 'unique:program_studi,kode_prodi',
+            ],
             'nama_prodi' => 'required',
         ];
     }
