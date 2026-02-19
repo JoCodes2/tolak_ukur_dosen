@@ -10,5 +10,5 @@ class ProdiModel extends Model
 {
     use HasUuids, HasFactory;
     protected $table = 'program_studi';
-    protected $fillable = ['id', 'nama_prodi', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'kode_prodi', 'nama_prodi', 'created_at', 'updated_at'];
 }
