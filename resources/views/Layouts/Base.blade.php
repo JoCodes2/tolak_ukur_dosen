@@ -22,9 +22,13 @@
 
     <meta name="description" content="" />
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+   <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/assets/stmik.png') }}" />
+    @include('Layouts.Styles')
+    <script>
+        let appUrl = '{{ env('APP_URL') }}';
+    </script>
 
     @include('Layouts.Styles')
   </head>

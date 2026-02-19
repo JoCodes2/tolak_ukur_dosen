@@ -1,22 +1,11 @@
 @props([
     'id',
-    'label',
-    'type' => 'text',
-    'placeholder' => '',
-    'value' => '',
-    'required' => false
+    'action' => '#'
 ])
 
-<div class="mb-3">
-    <label for="{{ $id }}" class="form-label">{{ $label }} @if($required) <span class="text-danger">*</span> @endif</label>
-    <input
-        type="{{ $type }}"
-        class="form-control"
-        id="{{ $id }}"
-        name="{{ $id }}"
-        placeholder="{{ $placeholder }}"
-        value="{{ $value }}"
-        {{ $required ? 'required' : '' }}
-        {{ $attributes }}
-    >
-</div>
+<form id="{{ $id }}" action="{{ $action }}" method="POST" {{ $attributes }}>
+    @csrf
+    <div class="row">
+        {{ $slot }}
+    </div>
+</form>
