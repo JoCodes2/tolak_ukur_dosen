@@ -64,6 +64,18 @@
                 <div data-i18n="Mahasiswa">Mahasiswa</div>
             </a>
         </li>
+        <li class="menu-item {{ request()->is('matakuliah*') ? 'active' : '' }}">
+            <a href="/matakuliah" class="menu-link">
+                <i class="menu-icon fa-solid fa-book"></i>
+                <div data-i18n="Matakuliah">Matakuliah</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->is('periode*') ? 'active' : '' }}">
+            <a href="/periode" class="menu-link">
+                <i class="menu-icon fa-solid fa-calendar"></i>
+                <div data-i18n="Periode">Periode</div>
+            </a>
+        </li>
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Aktivitas & Monitoring</span>

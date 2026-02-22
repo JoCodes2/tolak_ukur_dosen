@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
 
-        <x-base-header title="Manajemen Kelas" icon="fa-solid fa-graduation-cap ">
+        <x-base-header title="Manajemen Kelas" icon="fa-solid fa-chalkboard-user ">
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-primary btn-sm" id="btnTambahKelas">
                     <i class="fa fa-plus"></i> Tambah Kelas
@@ -32,7 +32,7 @@
 
         <x-base-form id="formSimpanKelas">
             <input type="hidden" name="id" id="kelas_id">
-            
+
             <div class="col-12 mb-3">
                 <label for="nama_kelas" class="form-label">Nama Kelas <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" placeholder="Contoh: TI/SI-1">
