@@ -19,6 +19,18 @@ Route::get('/user', function () {
 Route::get('/prodi', function () {
     return view('pages.prodi');
 });
+Route::get('/kelas', function () {
+    return view('pages.kelas');
+});
+Route::get('/mahasiswa', function () {
+    return view('pages.mahasiswa');
+});
+Route::get('/periode', function () {
+    return view('pages.periode');
+});
+Route::get('/matakuliah', function () {
+    return view('pages.matakuliah');
+});
 // route api
 Route::prefix('sicici')->group(function () {
     Route::prefix('prodi')->controller(ProdiController::class)->group(function () {

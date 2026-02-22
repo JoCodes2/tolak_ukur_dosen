@@ -1,7 +1,8 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo py-3">
         <a href="/home" class="app-brand-link d-flex align-items-center text-decoration-none">
-            <span class="app-brand-logo demo bg-white shadow-sm p-2 rounded-3 d-flex align-items-center justify-content-center">
+            <span
+                class="app-brand-logo demo bg-white shadow-sm p-2 rounded-3 d-flex align-items-center justify-content-center">
                 <img src="{{ asset('assets/assets/img/stmikadhigunaicon.svg') }}" alt="Logo" class="img-fluid"
                     style="width: 38px; height: 38px; object-fit: contain;">
             </span>
@@ -13,8 +14,7 @@
                         SICICI
                     </span>
                     <div class="mt-1">
-                        <small class="text-muted fw-semibold d-block"
-                            style="font-size: 0.65rem; line-height: 1.2;">
+                        <small class="text-muted fw-semibold d-block" style="font-size: 0.65rem; line-height: 1.2;">
                             STMIK ADHI GUNA
                         </small>
                     </div>
@@ -50,6 +50,18 @@
             <a href="/prodi" class="menu-link">
                 <i class="menu-icon fa-solid fa-graduation-cap"></i>
                 <div data-i18n="Program Studi">Program Studi</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->is('kelas*') ? 'active' : '' }}">
+            <a href="/kelas" class="menu-link">
+                <i class="menu-icon fa-solid fa-chalkboard-user"></i>
+                <div data-i18n="Kelas">Kelas</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->is('mahasiswa*') ? 'active' : '' }}">
+            <a href="/mahasiswa" class="menu-link">
+                <i class="menu-icon fa-solid fa-users"></i>
+                <div data-i18n="Mahasiswa">Mahasiswa</div>
             </a>
         </li>
 
