@@ -103,4 +103,23 @@ class AktivitasPerkuliahanRepositories implements AktivitasPerkuliahanInterfaces
 
         return $this->delete();
     }
+
+
+    public function getDetailAktivitas($id)
+    {
+        $data = $this->aktivitasPerkuliahan->with([
+            'periode',
+            'prodi',
+            'kelas',
+            'pesertaDetail.mahasiswa',
+            'mengajarDetail.mataKuliah',
+            'mengajarDetail.dosen'
+        ])->find($id);
+
+        if (!$data) {
+            return $this->idOrDataNotFound();
+        }
+
+        return $this->success($data);
+    }
 }

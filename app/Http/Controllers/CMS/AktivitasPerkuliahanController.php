@@ -5,7 +5,6 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AktivitasPerkuliahanRequest;
 use App\Repositories\AktivitasPerkuliahanRepositories;
-use Illuminate\Http\Request;
 
 class AktivitasPerkuliahanController extends Controller
 {
@@ -34,5 +33,9 @@ class AktivitasPerkuliahanController extends Controller
     public function deleteData($id)
     {
         return $this->aktivitasPerkuliahan->deleteData($id);
+    }
+    public function showDetail($id)
+    {
+        return $this->aktivitasPerkuliahan->getDetailAktivitas($id);
     }
 }
