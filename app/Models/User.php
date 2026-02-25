@@ -26,6 +26,7 @@ class User extends Authenticatable
         'nidn',
         'jabatan',
         'password',
+        'id_prodi',
         'role'
     ];
 
@@ -53,6 +54,6 @@ class User extends Authenticatable
     }
     public function prodi(): BelongsTo
     {
-        return $this->belongsTo(ProdiModel::class);
+        return $this->belongsTo(ProdiModel::class, 'id_prodi', 'id');
     }
 }

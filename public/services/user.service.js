@@ -35,26 +35,26 @@ class UserService {
                 responsive: true,
                 language: {
                     emptyTable: `
-                        <div class="py-5 text-center">
-                            <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
-                                 style="width: 100px; height: 100px; background-color: #e8ebff;">
-                                <i class="fa-solid fa-users-gear fa-3x" style="color: #696cff;"></i>
-                            </div>
-                            <h5 class="fw-bold" style="color: #566a7f;">Belum Ada Data Pengguna</h5>
-                            <div class="row justify-content-center">
-                                <div class="col-md-8">
-                                    <div class="alert shadow-none mb-0"
-                                         style="background-color: #e8ebff; border: none; border-left: 5px solid #0026ff; border-radius: 8px;">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-circle-info fs-4 me-3" style="color: #0026ff;"></i>
-                                            <div class="text-start" style="color: #697a8d; font-size: 0.9rem;">
-                                                Silakan tekan tombol <strong>Tambah Pengguna</strong> untuk mengelola Dosen, Admin, atau Kaprodi.
-                                            </div>
+                    <div class="py-5 text-center">
+                        <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
+                             style="width: 100px; height: 100px; background-color: #e8ebff;">
+                            <i class="fa-solid fa-users-gear fa-3x" style="color: #696cff;"></i>
+                        </div>
+                        <h5 class="fw-bold" style="color: #566a7f;">Belum Ada Data Pengguna</h5>
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="alert shadow-none mb-0"
+                                     style="background-color: #e8ebff; border: none; border-left: 5px solid #0026ff; border-radius: 8px;">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa-solid fa-circle-info fs-4 me-3" style="color: #0026ff;"></i>
+                                        <div class="text-start" style="color: #697a8d; font-size: 0.9rem;">
+                                            Silakan tekan tombol <strong>Tambah Pengguna</strong> untuk mengelola Dosen atau Kaprodi.
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>`
+                        </div>
+                    </div>`
                 }
             });
         }
@@ -66,30 +66,45 @@ class UserService {
             const response = await this.ajaxRequest(`${appUrl}/sicici/user/`, 'GET');
             const userData = response.data;
 
+
             if (userData && userData.length > 0) {
-                userData.forEach((item, index) => {
-                    const roleBadge = item.role === 'admin' ? 'bg-label-primary' :
-                        (item.role === 'prodi' ? 'bg-label-info' : 'bg-label-warning');
+                let displayIndex = 1;
 
-                    const actions = `
-                        <div class="d-flex justify-content-center gap-2">
-                            <button class="btn btn-outline-info btn-sm btnEditUser" data-id="${item.id}" title="Edit">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm btnHapusUser" data-id="${item.id}" title="Hapus">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </div>`;
+                userData.forEach((item) => {
+                    if (item.role !== 'admin') {
 
-                    datatable.row.add([
-                        index + 1,
-                        item.nidn || '<span class="text-muted small">N/A</span>',
-                        `<div><strong>${item.nama}</strong>${item.prodi ? `<br><small class="text-primary">${item.prodi.nama_prodi}</small>` : ''}</div>`,
-                        item.email,
-                        `<span class="badge ${roleBadge} text-capitalize">${item.role}</span>`,
-                        item.jabatan || '-',
-                        actions
-                    ]);
+                        // Logika Penentuan Badge dan Label Teks
+                        let roleBadge = '';
+                        let roleText = '';
+
+                        if (item.role === 'prodi') {
+                            roleBadge = 'bg-label-info';
+                            roleText = 'Kaprodi';
+                        } else if (item.role === 'dosen') {
+                            roleBadge = 'bg-label-warning';
+                            roleText = 'Tenaga Pengajar';
+                        }
+
+                        const actions = `
+            <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-outline-info btn-sm btnEditUser" data-id="${item.id}" title="Edit">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm btnHapusUser" data-id="${item.id}" title="Hapus">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>`;
+
+                        datatable.row.add([
+                            displayIndex++,
+                            item.nidn || '-',
+                            `<div><strong>${item.nama}</strong>${item.prodi ? `<br><small class="text-primary">${item.prodi.nama_prodi}</small>` : ''}</div>`,
+                            item.email,
+                            `<span class="badge ${roleBadge}">${roleText}</span>`, // Menggunakan roleText yang baru
+                            item.jabatan || '-',
+                            actions
+                        ]);
+                    }
                 });
                 datatable.draw();
             }
@@ -97,7 +112,6 @@ class UserService {
             console.error('Gagal memuat data:', error);
         }
     }
-
     async upsertData(formElement, checkingEdit) {
         const submitButton = $('#btnProsesUser');
         const originalText = submitButton.html();

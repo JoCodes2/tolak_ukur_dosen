@@ -44,12 +44,12 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label for="nidn" class="form-label">NIDN</label>
+                <label for="nidn" class="form-label">NIDN/NUPTK</label>
                 <input type="text" class="form-control" id="nidn" name="nidn" placeholder="Contoh: 0912345678">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label for="jabatan" class="form-label">Jabatan Akademik</label>
+                <label for="jabatan" class="form-label">Jabatan Struktural</label>
                 <input type="text" class="form-control" id="jabatan" name="jabatan" placeholder="Contoh: Lektor Kepala">
             </div>
 
@@ -59,7 +59,6 @@
                     <option value="">-- Pilih Role --</option>
                     <option value="prodi">Kaprodi (Program Studi)</option>
                     <option value="dosen">Dosen</option>
-                    <option value="admin">Admin</option>
                 </select>
             </div>
 
