@@ -35,13 +35,30 @@ class AktivitasService {
                 responsive: true,
                 language: {
                     emptyTable: `
-                    <div class="py-5 text-center">
-                        <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
-                             style="width: 100px; height: 100px; background-color: #e8ebff;">
-                            <i class="fa-solid fa-calendar-check fa-3x" style="color: #696cff;"></i>
+                <div class="py-5 text-center">
+                    <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
+                         style="width: 100px; height: 100px; background-color: #e8ebff;">
+                        <i class="fa-solid fa-calendar-check fa-3x" style="color: #696cff;"></i>
+                    </div>
+
+                    <h5 class="fw-bold" style="color: #566a7f;">Belum Ada Aktivitas Perkuliahan</h5>
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="alert shadow-none mb-0"
+                                 style="background-color: #e8ebff; border: none; border-left: 5px solid #0026ff; border-radius: 8px;">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-circle-info fs-4 me-3" style="color: #0026ff;"></i>
+                                    <div class="text-start" style="color: #697a8d; font-size: 0.9rem;">
+                                        Sistem belum menemukan jadwal atau wadah perkuliahan yang dibuka.
+                                        Silakan tekan tombol <strong>Tambah Aktivitas</strong>
+                                        untuk mulai membuka kelas baru pada periode ini.
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <h5 class="fw-bold" style="color: #566a7f;">Belum Ada Aktivitas Perkuliahan</h5>
-                    </div>`
+                    </div>
+                </div>`
                 }
             });
         }
@@ -57,10 +74,10 @@ class AktivitasService {
                 data.forEach((item, index) => {
                     const actions = `
                     <div class="d-flex justify-content-center gap-2">
-                        <button class="btn btn-outline-primary btn-sm btnDetailAktivitas" data-id="${item.id}" title="Lihat Detail & Kelola">
+                        <button class="btn btn-outline-primary btn-sm btnDetailAktivitas" data-id="${item.id}" title="Lihat Detail">
                             <i class="fa fa-eye"></i>
                         </button>
-                        <button class="btn btn-outline-info btn-sm btnEditAktivitas" data-id="${item.id}" title="Edit Master">
+                        <button class="btn btn-outline-info btn-sm btnEditAktivitas" data-id="${item.id}" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                         <button class="btn btn-outline-danger btn-sm btnHapusAktivitas" data-id="${item.id}" title="Hapus">
@@ -73,8 +90,8 @@ class AktivitasService {
                         item.periode?.nama ?? '-',
                         item.prodi?.nama_prodi ?? '-',
                         `<span class="badge bg-label-primary">${item.kelas?.nama_kelas ?? '-'}</span>`,
-                        `<span class="badge badge-center rounded-pill bg-info">${item.mengajar_detail_count ?? 0}</span>`,
-                        `<span class="badge badge-center rounded-pill bg-success">${item.peserta_detail_count ?? 0}</span>`,
+                        `<span class="badge badge-center rounded-pill bg-info">${item.total_dosen ?? 0}</span>`,
+                        `<span class="badge badge-center rounded-pill bg-success">${item.total_mahasiswa ?? 0}</span>`,
                         actions
                     ]);
                 });

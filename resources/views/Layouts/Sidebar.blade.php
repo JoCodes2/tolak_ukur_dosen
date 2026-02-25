@@ -1,8 +1,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo py-3">
         <a href="/home" class="app-brand-link d-flex align-items-center text-decoration-none">
-            <span
-                class="app-brand-logo demo bg-white shadow-sm p-2 rounded-3 d-flex align-items-center justify-content-center">
+            <span class="app-brand-logo demo bg-white shadow-sm p-2 rounded-3 d-flex align-items-center justify-content-center">
                 <img src="{{ asset('assets/assets/img/stmikadhigunaicon.svg') }}" alt="Logo" class="img-fluid"
                     style="width: 38px; height: 38px; object-fit: contain;">
             </span>
@@ -79,6 +78,13 @@
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Aktivitas & Monitoring</span>
+        </li>
+
+        <li class="menu-item {{ request()->is('aktivitas-perkuliahan*') ? 'active' : '' }}">
+            <a href="/aktivitas-perkuliahan" class="menu-link">
+                <i class="menu-icon fa-solid fa-calendar-check"></i>
+                <div data-i18n="Aktivitas">Aktivitas Perkuliahan</div>
+            </a>
         </li>
 
         <li class="menu-header small text-uppercase">

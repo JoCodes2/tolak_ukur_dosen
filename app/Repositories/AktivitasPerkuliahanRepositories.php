@@ -20,7 +20,14 @@ class AktivitasPerkuliahanRepositories implements AktivitasPerkuliahanInterfaces
 
     public function getAllData()
     {
-        $data = $this->aktivitasPerkuliahan->with(['periode', 'prodi', 'kelas'])->latest()->get();
+        $data = $this->aktivitasPerkuliahan->with(['periode', 'prodi', 'kelas'])
+            ->withCount([
+                'mengajarDetail as total_dosen',
+                'pesertaDetail as total_mahasiswa'
+            ])
+            ->latest()
+            ->get();
+
 
         if ($data->isEmpty()) {
             return $this->dataNotFound();
@@ -31,7 +38,7 @@ class AktivitasPerkuliahanRepositories implements AktivitasPerkuliahanInterfaces
 
     public function getDataById($id)
     {
-        $data = $this->aktivitasPerkuliahan->with(['periode', 'prodi', 'kelas', 'mengajarDetail.dosen', 'mengajarDetail.mataKuliah', 'pesertaDetail.mahasiswa'])->find($id);
+        $data = $this->aktivitasPerkuliahan->with(['periode', 'prodi', 'kelas'])->find($id);
 
         if (!$data) {
             return $this->idOrDataNotFound();
