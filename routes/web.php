@@ -51,8 +51,17 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.aktivitas-perkuliahan');
     });
 
+    // pages aktivitas perkuliahan
+    Route::get('/aktivitas-perkuliahan', function () {
+        return view('pages.aktivitas-perkuliahan');
+    });
+
+    Route::get('/aktivitas-perkuliahan/detail/{id}', function ($id) {
+        return view('pages.aktivitas-detail', ['id_aktivitas' => $id]);
+    })->name('aktivitas.detail');
     Route::post('sicici/logout', [LoginController::class, 'logout']);
 });
+
 
 // route api
 Route::prefix('sicici')->group(function () {

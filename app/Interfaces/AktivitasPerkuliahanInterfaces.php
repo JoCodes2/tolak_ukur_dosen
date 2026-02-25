@@ -11,4 +11,5 @@ interface AktivitasPerkuliahanInterfaces
     public function getDataById($id);
     public function updateData(AktivitasPerkuliahanRequest $request, $id);
     public function deleteData($id);
+    public function getDetailAktivitas($id);
 }
