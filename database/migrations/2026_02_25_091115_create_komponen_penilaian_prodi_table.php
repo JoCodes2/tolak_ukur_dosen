@@ -13,10 +13,20 @@ return new class extends Migration
     {
         Schema::create('komponen_penilaian_prodi', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_prodi')->constrained('program_studi');
-            $table->foreignUuid('id_mk')->constrained('mata_kuliah');
-            $table->foreignUuid('id_periode')->constrained('periode');
-            $table->enum('nama_komponen', ['Tugas', 'UTS', 'UAS', 'Kehadiran']);
+
+            $table->foreignUuid('id_prodi')
+                ->constrained('program_studi')
+                ->restrictOnDelete();
+
+            $table->foreignUuid('id_mk')
+                ->constrained('mata_kuliah')
+                ->restrictOnDelete();
+
+            $table->foreignUuid('id_periode')
+                ->constrained('periode')
+                ->restrictOnDelete();
+
+            $table->string('nama_komponen');
             $table->timestamps();
         });
     }

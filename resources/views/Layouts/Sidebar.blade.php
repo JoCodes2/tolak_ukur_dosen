@@ -82,7 +82,7 @@
         </li>
 
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Sistem</span>
+            <span class="menu-header-text">Akun & Management Pegawai</span>
         </li>
 
         <li class="menu-item {{ request()->is('user*') ? 'active' : '' }}">

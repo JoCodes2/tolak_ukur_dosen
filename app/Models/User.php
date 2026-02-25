@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'nidn',
         'jabatan',
         'password',
+        'id_prodi',
         'role'
     ];
 
@@ -50,8 +52,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function aktivitas()
+    public function prodi(): BelongsTo
     {
-        return $this->hasMany(AktivitasPerkuliahanModel::class, 'id_dosen');
+        return $this->belongsTo(ProdiModel::class, 'id_prodi', 'id');
     }
 }

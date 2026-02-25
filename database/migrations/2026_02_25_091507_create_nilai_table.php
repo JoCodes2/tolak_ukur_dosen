@@ -11,10 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('krs', function (Blueprint $table) {
+        Schema::create('nilai', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_mahasiswa')->constrained('mahasiswa');
-            $table->foreignUuid('id_aktivitas')->constrained('aktivitas_perkuliahan');
+
+            $table->foreignUuid('id_peserta')
+                ->constrained('aktivitas_peserta_detail')
+                ->restrictOnDelete();
+
+            $table->foreignUuid('id_bobot')
+                ->constrained('bobot_penilaian_dosen')
+                ->restrictOnDelete();
+
+            $table->float('nilai');
             $table->timestamps();
         });
     }
@@ -24,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('krs');
+        Schema::dropIfExists('nilai');
     }
 };

@@ -13,11 +13,20 @@ return new class extends Migration
     {
         Schema::create('nilai_akhir', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_krs')->constrained('krs');
+
+            $table->foreignUuid('id_peserta')
+                ->constrained('aktivitas_peserta_detail')
+                ->restrictOnDelete();
+
+            $table->foreignUuid('id_mk')
+                ->constrained('mata_kuliah')
+                ->restrictOnDelete();
+
             $table->float('nilai_angka');
-            $table->string('nilai_huruf', 2)->nullable();
-            $table->enum('status', ['draft', 'final'])->default('draft');
-            $table->timestamps();
+            $table->string('nilai_huruf', 2);
+            $table->float('bobot_mutu');
+            $table->enum('status', ['draft', 'final']);
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

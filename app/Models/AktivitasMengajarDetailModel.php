@@ -6,25 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class KomponenPenilaianProdiModel extends Model
+class AktivitasMengajarDetailModel extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $table = 'komponen_penilaian_prodi';
+    protected $table = 'aktivitas_mengajar_detail';
 
     protected $fillable = [
         'id',
-        'id_prodi',
+        'id_aktivitas',
         'id_mk',
-        'id_periode',
-        'nama_komponen',
+        'id_dosen',
         'created_at',
         'updated_at'
     ];
 
-    public function prodi()
+    public function aktivitas()
     {
-        return $this->belongsTo(ProdiModel::class, 'id_prodi');
+        return $this->belongsTo(AktivitasPerkuliahanModel::class, 'id_aktivitas');
     }
 
     public function mataKuliah()
@@ -32,13 +31,13 @@ class KomponenPenilaianProdiModel extends Model
         return $this->belongsTo(MataKuliahModel::class, 'id_mk');
     }
 
-    public function periode()
+    public function dosen()
     {
-        return $this->belongsTo(PeriodeModel::class, 'id_periode');
+        return $this->belongsTo(User::class, 'id_dosen');
     }
 
     public function bobotPenilaian()
     {
-        return $this->hasMany(BobotPenilaianDosenModel::class, 'id_komponen');
+        return $this->hasMany(BobotPenilaianDosenModel::class, 'id_mengajar_detail');
     }
 }

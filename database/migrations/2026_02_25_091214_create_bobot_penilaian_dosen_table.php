@@ -13,8 +13,15 @@ return new class extends Migration
     {
         Schema::create('bobot_penilaian_dosen', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_aktivitas')->constrained('aktivitas_perkuliahan');
-            $table->foreignUuid('id_komponen')->constrained('komponen_penilaian_prodi');
+
+            $table->foreignUuid('id_mengajar_detail')
+                ->constrained('aktivitas_mengajar_detail')
+                ->restrictOnDelete();
+
+            $table->foreignUuid('id_komponen')
+                ->constrained('komponen_penilaian_prodi')
+                ->restrictOnDelete();
+
             $table->float('bobot');
             $table->timestamps();
         });
