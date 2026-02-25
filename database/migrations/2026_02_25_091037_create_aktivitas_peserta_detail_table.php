@@ -11,11 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nilai', function (Blueprint $table) {
+        Schema::create('aktivitas_peserta_detail', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_krs')->constrained('krs');
-            $table->foreignUuid('id_bobot')->constrained('bobot_penilaian_dosen');
-            $table->float('nilai');
+
+            $table->foreignUuid('id_aktivitas')
+                ->constrained('aktivitas_perkuliahan')
+                ->restrictOnDelete();
+
+            $table->foreignUuid('id_mahasiswa')
+                ->constrained('mahasiswa')
+                ->restrictOnDelete();
+
             $table->timestamps();
         });
     }
@@ -25,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nilai');
+        Schema::dropIfExists('aktivitas_peserta_detail');
     }
 };

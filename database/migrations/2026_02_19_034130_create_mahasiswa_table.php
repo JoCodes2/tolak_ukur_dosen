@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nim')->unique();
             $table->string('nama');
             $table->year('angkatan');
+            $table->foreignUuid('id_prodi')
+                ->constrained('program_studi')
+                ->restrictOnDelete();
             $table->timestamps();
         });
     }

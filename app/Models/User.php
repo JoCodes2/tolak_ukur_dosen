@@ -50,8 +50,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function aktivitas()
-    {
-        return $this->hasMany(AktivitasPerkuliahanModel::class, 'id_dosen');
-    }
 }
