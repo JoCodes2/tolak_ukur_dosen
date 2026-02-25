@@ -60,8 +60,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.btnEditKelas', function () {
-    const id = $(this).data('id');
-    kelas.getDataById(id);
+        const id = $(this).data('id');
+        kelas.getDataById(id);
     });
 
     $(document).on('click', '.btnHapusKelas', function () {
