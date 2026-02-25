@@ -22,7 +22,7 @@
 
         <x-base-table :headers="$headers" id="userTable">
             <tbody id="userBody">
-            </tbody>
+                </tbody>
         </x-base-table>
     </x-base-body>
 </div>
@@ -58,7 +58,6 @@
                     <option value="">-- Pilih Role --</option>
                     <option value="prodi">Kaprodi (Program Studi)</option>
                     <option value="dosen">Dosen</option>
-                    <option value="admin">Admin</option>
                 </select>
             </div>
 
@@ -66,18 +65,13 @@
                 <label for="id_prodi" class="form-label">Program Studi <span class="text-danger">*</span></label>
                 <select class="form-select select2" id="id_prodi" name="id_prodi">
                     <option value="">-- Pilih Program Studi --</option>
-                </select>
+                    </select>
             </div>
 
             <div class="col-md-6 mb-3">
                 <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="********">
                 <small class="text-muted" id="password_note" style="display:none;">Kosongkan jika tidak ingin mengubah password</small>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label for="password_confirmation" class="form-label">Konfirmasi Password <span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="********">
             </div>
         </div>
     </x-base-form>
