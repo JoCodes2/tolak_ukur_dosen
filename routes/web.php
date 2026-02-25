@@ -40,8 +40,9 @@ Route::get('/aktivitas-perkuliahan', function () {
     return view('pages.aktivitas-perkuliahan');
 });
 
-// pages monitoring penilaian
-
+Route::get('/aktivitas-perkuliahan/detail/{id}', function ($id) {
+    return view('pages.aktivitas-detail', ['id_aktivitas' => $id]);
+})->name('aktivitas.detail');
 
 // route api
 Route::prefix('sicici')->group(function () {
