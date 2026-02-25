@@ -1,38 +1,39 @@
-import KelasService from "../services/kelas.service.js";
+import AktivitasService from "../services/aktivitas-perkuliahan.service.js";
+
 
 $(document).ready(function () {
-    const kelas = new KelasService();
+    const aktivitas = new AktivitasService();
 
-    kelas.getAllData();
+    aktivitas.getAllData();
+    aktivitas.loadDropdownData();
 
-    $('#btnTambahKelas').on('click', function () {
-        $('#formSimpanKelas')[0].reset();
-        $('#kelas_id').val('');
+    $('#btnTambahAktivitas').on('click', function () {
+        $('#formSimpanAktivitas')[0].reset();
+        $('#id_aktivitas').val('');
 
-        $('#formSimpanKelas .form-control').removeClass('is-valid is-invalid');
-        $('.error-msg').text('');
+        $('.form-select').val('').trigger('change');
+        $('#formSimpanAktivitas .form-control, #formSimpanAktivitas .form-select').removeClass('is-valid is-invalid');
 
-        $('#modalInputKelas').modal('show');
+        $('#modalInputAktivitas').modal('show');
     });
 
     function validation() {
-        $('#formSimpanKelas').validate({
+        $('#formSimpanAktivitas').validate({
             rules: {
-                nama_kelas: {
-                    required: true
-                },
+                id_periode: { required: true },
+                id_prodi: { required: true },
+                id_kelas: { required: true }
             },
             messages: {
-                nama_kelas: {
-                    required: "Nama kelas wajib diisi"
-                },
+                id_periode: { required: "Periode akademik wajib dipilih" },
+                id_prodi: { required: "Program studi wajib dipilih" },
+                id_kelas: { required: "Kelas wajib dipilih" }
             },
             errorElement: 'small',
             errorPlacement: function (error, element) {
                 error.addClass('text-danger');
-                const errorId = '#error-' + element.attr('name');
-                if ($(errorId).length) {
-                    $(errorId).html(error);
+                if (element.hasClass('select2-hidden-accessible')) {
+                    error.insertAfter(element.next('.select2-container'));
                 } else {
                     error.insertAfter(element);
                 }
@@ -49,29 +50,34 @@ $(document).ready(function () {
     validation();
 
     function checkingEdit() {
-        return $('#kelas_id').val() ? true : false;
+        return $('#id_aktivitas').val() ? true : false;
     }
 
-    $('#btnProsesKelas').on('click', function (e) {
+    $('#btnProsesAktivitas').on('click', function (e) {
         e.preventDefault();
-        if ($('#formSimpanKelas').valid()) {
-            kelas.upsertData($('#formSimpanKelas')[0], checkingEdit);
+        if ($('#formSimpanAktivitas').valid()) {
+            aktivitas.upsertData($('#formSimpanAktivitas')[0], checkingEdit);
         }
     });
 
-    $(document).on('click', '.btnEditKelas', function () {
-    const id = $(this).data('id');
-    kelas.getDataById(id);
-    });
-
-    $(document).on('click', '.btnHapusKelas', function () {
+    $(document).on('click', '.btnDetailAktivitas', function () {
         const id = $(this).data('id');
-        kelas.deleteData(id);
+        aktivitas.goToDetail(id);
     });
 
-    $('#modalInputKelas').on('hidden.bs.modal', function () {
-        $('#formSimpanKelas')[0].reset();
-        $('#formSimpanKelas .form-control').removeClass('is-invalid is-valid');
-        $('.error-msg').text('');
+    $(document).on('click', '.btnEditAktivitas', function () {
+        const id = $(this).data('id');
+        aktivitas.getDataById(id);
+    });
+
+    $(document).on('click', '.btnHapusAktivitas', function () {
+        const id = $(this).data('id');
+        aktivitas.deleteData(id);
+    });
+
+    $('#modalInputAktivitas').on('hidden.bs.modal', function () {
+        $('#formSimpanAktivitas')[0].reset();
+        $('.form-select').val('').trigger('change');
+        $('#formSimpanAktivitas .form-control, #formSimpanAktivitas .form-select').removeClass('is-invalid is-valid');
     });
 });
