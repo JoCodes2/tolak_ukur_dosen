@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
 use App\Http\Controllers\CMS\KelasController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
@@ -34,15 +35,17 @@ Route::get('/user', function () {
     return view('pages.user');
 });
 
-
 // pages aktivitas perkuliahan
-
+Route::get('/aktivitas-perkuliahan', function () {
+    return view('pages.aktivitas-perkuliahan');
+});
 
 // pages monitoring penilaian
 
 
 // route api
 Route::prefix('sicici')->group(function () {
+    // master data
     Route::prefix('prodi')->controller(ProdiController::class)->group(function () {
         Route::get('/', 'getAllData');
         Route::post('/create', 'createData');
@@ -83,7 +86,17 @@ Route::prefix('sicici')->group(function () {
         Route::delete('/delete/{id}', 'deleteData');
     });
 
+    // managemenet user
     Route::prefix('user')->controller(UserController::class)->group(function () {
+        Route::get('/', 'getAllData');
+        Route::post('/create', 'createData');
+        Route::get('/get/{id}', 'getDataById');
+        Route::post('/update/{id}', 'updateData');
+        Route::delete('/delete/{id}', 'deleteData');
+    });
+
+    // aktivitas perkuliahan
+    Route::prefix('aktivitas-perkuliahan')->controller(AktivitasPerkuliahanController::class)->group(function () {
         Route::get('/', 'getAllData');
         Route::post('/create', 'createData');
         Route::get('/get/{id}', 'getDataById');
