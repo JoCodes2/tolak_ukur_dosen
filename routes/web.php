@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
 use App\Http\Controllers\CMS\KelasController;
 use App\Http\Controllers\CMS\MahasiswaController;
@@ -9,39 +10,49 @@ use App\Http\Controllers\CMS\ProdiController;
 use App\Http\Controllers\CMS\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('admin.dashboard');
-});
 
-// pages master data
-Route::get('/prodi', function () {
-    return view('pages.prodi');
-});
-Route::get('/kelas', function () {
-    return view('pages.kelas');
-});
-Route::get('/mahasiswa', function () {
-    return view('pages.mahasiswa');
-});
-Route::get('/periode', function () {
-    return view('pages.periode');
-});
-Route::get('/matakuliah', function () {
-    return view('pages.matakuliah');
-});
 
-// pages  management pengguna dan dosen
-Route::get('/user', function () {
-    return view('pages.user');
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+Route::post('sicici/login', [LoginController::class, 'login']);
+
+Route::middleware(['auth', 'web'])->group(function () {
+    // route admin
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    });
+
+    // pages master data
+    Route::get('/prodi', function () {
+        return view('pages.prodi');
+    });
+    Route::get('/kelas', function () {
+        return view('pages.kelas');
+    });
+    Route::get('/mahasiswa', function () {
+        return view('pages.mahasiswa');
+    });
+    Route::get('/periode', function () {
+        return view('pages.periode');
+    });
+    Route::get('/matakuliah', function () {
+        return view('pages.matakuliah');
+    });
+
+    // pages  management pengguna dan dosen
+    Route::get('/user', function () {
+        return view('pages.user');
+    });
+
+    // pages aktivitas perkuliahan
+    Route::get('/aktivitas-perkuliahan', function () {
+        return view('pages.aktivitas-perkuliahan');
+    });
+
+    Route::post('sicici/logout', [LoginController::class, 'logout']);
 });
-
-// pages aktivitas perkuliahan
-Route::get('/aktivitas-perkuliahan', function () {
-    return view('pages.aktivitas-perkuliahan');
-});
-
-// pages monitoring penilaian
-
 
 // route api
 Route::prefix('sicici')->group(function () {
