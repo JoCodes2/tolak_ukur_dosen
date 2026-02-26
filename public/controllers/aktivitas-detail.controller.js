@@ -17,7 +17,7 @@ $(document).ready(function () {
     });
 
     $('#btnSimpanKolektif').on('click', function () {
-        const selectedIds = $('.check-mhs:checked').map(function () {
+        const selectedIds = $('#formKolektifMahasiswa .check-mhs:checked').map(function () {
             return $(this).val();
         }).get();
 
@@ -27,7 +27,6 @@ $(document).ready(function () {
 
         detail.storePesertaKolektif(aktivitasId, selectedIds);
     });
-
     $(document).on('click', '.btnHapusPeserta', function () {
         const id = $(this).data('id');
         detail.deletePeserta(id, aktivitasId);

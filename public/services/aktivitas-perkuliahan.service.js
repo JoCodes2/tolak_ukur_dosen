@@ -184,11 +184,13 @@ class AktivitasService {
                 this.ajaxRequest(`${appUrl}/sicici/kelas`, 'GET')
             ]);
 
-            this.populateSelect('#id_periode', periode.data, 'nama');
+            const periodeAktif = periode.data.filter(item => item.status == 'aktif');
+
+            this.populateSelect('#id_periode', periodeAktif, 'nama');
             this.populateSelect('#id_prodi', prodi.data, 'nama_prodi');
             this.populateSelect('#id_kelas', kelas.data, 'nama_kelas');
         } catch (error) {
-            console.error("Gagal memuat data dropdown master");
+            console.error("Gagal memuat data dropdown master:", error);
         }
     }
 

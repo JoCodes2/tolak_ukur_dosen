@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CMS\AktivitasMengajarController;
 use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
+use App\Http\Controllers\CMS\AktivitasPesertaController;
 use App\Http\Controllers\CMS\KelasController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
@@ -117,10 +119,27 @@ Route::prefix('sicici')->group(function () {
 
     // aktivitas perkuliahan
     Route::prefix('aktivitas-perkuliahan')->controller(AktivitasPerkuliahanController::class)->group(function () {
-        Route::get('/', 'getAllData');
-        Route::post('/create', 'createData');
-        Route::get('/get/{id}', 'getDataById');
-        Route::post('/update/{id}', 'updateData');
-        Route::delete('/delete/{id}', 'deleteData');
+        Route::controller(AktivitasPerkuliahanController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::post('/create', 'createData');
+            Route::get('/get/{id}', 'getDataById');
+            Route::post('/update/{id}', 'updateData');
+            Route::delete('/delete/{id}', 'deleteData');
+        });
+
+        // Detail Peserta (Mahasiswa)
+        Route::prefix('peserta')->controller(AktivitasPesertaController::class)->group(function () {
+            Route::get('/{id_aktivitas}', 'getPeserta');
+            Route::get('/kolektif/tersedia', 'getMahasiswaTersedia');
+            Route::post('/kolektif/store', 'storeKolektif');
+            Route::delete('/delete/{id}', 'deleteData');
+        });
+
+        // Detail Mengajar (Dosen & MK)
+        Route::prefix('pengajar')->controller(AktivitasMengajarController::class)->group(function () {
+            Route::get('/{id_aktivitas}', 'getPengajar');
+            Route::post('/store', 'storePenugasan');
+            Route::delete('/delete/{id}', 'deleteData');
+        });
     });
 });
