@@ -33,33 +33,14 @@ class AktivitasService {
             this.table.DataTable({
                 pageLength: 10,
                 responsive: true,
+                order: [[2, 'asc'], [3, 'asc']],
                 language: {
-                    emptyTable: `
-                <div class="py-5 text-center">
-                    <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
-                         style="width: 100px; height: 100px; background-color: #e8ebff;">
-                        <i class="fa-solid fa-calendar-check fa-3x" style="color: #696cff;"></i>
-                    </div>
-
-                    <h5 class="fw-bold" style="color: #566a7f;">Belum Ada Aktivitas Perkuliahan</h5>
-
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <div class="alert shadow-none mb-0"
-                                 style="background-color: #e8ebff; border: none; border-left: 5px solid #0026ff; border-radius: 8px;">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-info fs-4 me-3" style="color: #0026ff;"></i>
-                                    <div class="text-start" style="color: #697a8d; font-size: 0.9rem;">
-                                        Sistem belum menemukan jadwal atau wadah perkuliahan yang dibuka.
-                                        Silakan tekan tombol <strong>Tambah Aktivitas</strong>
-                                        untuk mulai membuka kelas baru pada periode ini.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-                }
+                    emptyTable: this.getEmptyTemplate('fa-calendar-check', 'Belum Ada Aktivitas Perkuliahan', 'Sistem belum menemukan jadwal atau wadah perkuliahan yang dibuka. Silakan tekan tombol <strong>Tambah Aktivitas</strong> untuk mulai membuka kelas baru pada periode ini.')
+                },
+                columnDefs: [
+                    { targets: [0, 4, 5, 6], orderable: false },
+                    { targets: [1, 2, 3], orderable: true }
+                ]
             });
         }
 
@@ -71,22 +52,22 @@ class AktivitasService {
             const data = response.data ?? [];
 
             if (data.length > 0) {
-                data.forEach((item, index) => {
+                data.forEach((item) => {
                     const actions = `
-                    <div class="d-flex justify-content-center gap-2">
-                        <button class="btn btn-outline-primary btn-sm btnDetailAktivitas" data-id="${item.id}" title="Lihat Detail">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-outline-info btn-sm btnEditAktivitas" data-id="${item.id}" title="Edit">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-danger btn-sm btnHapusAktivitas" data-id="${item.id}" title="Hapus">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </div>`;
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-outline-primary btn-sm btnDetailAktivitas" data-id="${item.id}" title="Lihat Detail">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-info btn-sm btnEditAktivitas" data-id="${item.id}" title="Edit">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm btnHapusAktivitas" data-id="${item.id}" title="Hapus">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>`;
 
                     datatable.row.add([
-                        index + 1,
+                        "",
                         item.periode?.nama ?? '-',
                         item.prodi?.nama_prodi ?? '-',
                         `<span class="badge bg-label-primary">${item.kelas?.nama_kelas ?? '-'}</span>`,
@@ -96,7 +77,13 @@ class AktivitasService {
                     ]);
                 });
             }
-            datatable.draw();
+
+            datatable.on('order.dt search.dt', function () {
+                datatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
         } catch (error) {
             console.error('Gagal memuat data aktivitas:', error);
         }
@@ -202,6 +189,31 @@ class AktivitasService {
             });
         }
         $(selector).html(options);
+    }
+    getEmptyTemplate(icon, title, msg) {
+        return `
+        <div class="py-5 text-center">
+            <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
+                 style="width: 100px; height: 100px; background-color: #e8ebff;">
+                <i class="fa-solid ${icon} fa-3x" style="color: #696cff;"></i>
+            </div>
+
+            <h5 class="fw-bold" style="color: #566a7f;">${title}</h5>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="alert shadow-none mb-0"
+                         style="background-color: #e8ebff; border: none; border-left: 5px solid #0026ff; border-radius: 8px;">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-circle-info fs-4 me-3" style="color: #0026ff;"></i>
+                            <div class="text-start" style="color: #697a8d; font-size: 0.9rem;">
+                                ${msg}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
     }
 }
 
