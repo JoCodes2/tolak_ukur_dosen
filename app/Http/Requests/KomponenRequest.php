@@ -26,9 +26,9 @@ class KomponenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_prodi' => 'required|exists:program_studi',
-            'id_mk' => 'required|exists:mata_kuliah',
-            'id_periode' => 'required|exists:periode',
+            'id_prodi'      => 'required|exists:program_studi,id',
+            'id_mk'         => 'required|exists:mata_kuliah,id',
+            'id_periode'    => 'required|exists:periode,id',
             'nama_komponen' => 'required|string|max:255',
         ];
     }

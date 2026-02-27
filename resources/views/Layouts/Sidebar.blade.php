@@ -90,7 +90,7 @@
 
         <li class="menu-item {{ request()->is('komponen*') ? 'active' : '' }}">
             <a href="/komponen" class="menu-link">
-                <i class="menu-icon fa-solid fa-calendar-check"></i>
+                <i class="menu-icon fa-solid fa-book"></i>
                 <div data-i18n="Aktivitas">Komponen MK</div>
             </a>
         </li>

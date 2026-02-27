@@ -46,11 +46,6 @@
             border-right: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        .brand-logo {
-            width: 90px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 5px 20px rgba(0, 0, 0, 0.3));
-        }
 
         .brand-title {
             font-weight: 700;
@@ -185,10 +180,9 @@
         <!-- BRANDING -->
         <div class="branding-section">
             <div class="text-center">
-                <img src="{{ asset('assets/assets/img/20241107_171817.jpg') }}" class="brand-logo">
-                <h1 class="brand-title">Sistem Tolak Ukur Dosen</h1>
+                <h1 class="brand-title">Sistem Monitoring Penilaian Mahasiswa</h1>
                 <p class="brand-subtitle">
-                    Platform Monitoring & Evaluasi Kinerja Dosen
+                    Platform Monitoring Penilaian Mahasiswa
                     untuk Mendukung Mutu Akademik dan Akreditasi Institusi.
                 </p>
                 <img src="{{ asset('assets/assets/img/stmikadhigunaicon.svg') }}" class="brand-image">
@@ -200,7 +194,7 @@
             <div class="login-card">
                 <div class="login-header">
                     <h2>Selamat Datang 👨‍🏫</h2>
-                    <p>Silakan login untuk mengakses sistem evaluasi kinerja dosen.</p>
+                    <p>Silakan login untuk mengakses sistem monitoring penilaian mahasiswa.</p>
                 </div>
 
                 <form id="formLogin">
@@ -231,8 +225,11 @@
                 </form>
 
                 <div class="text-center mt-5">
-                    <p class="small text-muted">
+                    <p class="small text-muted mb-0">
                         &copy; {{ date('Y') }} Sistem Penjaminan Mutu Akademik
+                    </p>
+                    <p class="small text-muted">
+                        Created by JoCodes | v1.0.0
                     </p>
                 </div>
             </div>

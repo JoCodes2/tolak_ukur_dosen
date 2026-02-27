@@ -58,7 +58,7 @@ class KomponenRepositories implements komponenInterfaces
         $user = Auth::user();
 
         $query = $this->KomponenModel
-            ->select('id_prodi', 'id_mk', 'id_periode', 'nama_komponen');
+            ->select('id', 'id_prodi', 'id_mk', 'id_periode', 'nama_komponen');
 
         // Jika role prodi, filter sesuai id_prodi user
         if ($user->role === 'prodi') {
@@ -72,10 +72,13 @@ class KomponenRepositories implements komponenInterfaces
             })
             ->map(function ($items) {
                 return [
-                    'id_prodi' => $items->first()->id_prodi,
-                    'id_mk' => $items->first()->id_mk,
+                    'id_prodi'   => $items->first()->id_prodi,
+                    'id_mk'      => $items->first()->id_mk,
                     'id_periode' => $items->first()->id_periode,
-                    'nama_komponen' => $items->pluck('nama_komponen')->values(),
+                    'komponen'   => $items->map(fn($i) => [
+                        'id'             => $i->id,
+                        'nama_komponen'  => $i->nama_komponen,
+                    ])->values(),
                 ];
             })
             ->values();
