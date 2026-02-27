@@ -5,6 +5,7 @@ use App\Http\Controllers\CMS\AktivitasMengajarController;
 use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
 use App\Http\Controllers\CMS\AktivitasPesertaController;
 use App\Http\Controllers\CMS\KelasController;
+use App\Http\Controllers\CMS\KomponenController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
 use App\Http\Controllers\CMS\PeriodeController;
@@ -46,6 +47,17 @@ Route::middleware(['auth', 'web'])->group(function () {
     // pages  management pengguna dan dosen
     Route::get('/user', function () {
         return view('pages.user');
+    });
+
+    //  Route::get('/user', function () {
+    //     return view('pages.user');
+    // });
+
+    
+    // pages komponen
+    Route::get('/komponen', function () {
+        return view('pages.komponen');
+
     });
 
     // pages aktivitas perkuliahan
@@ -143,4 +155,13 @@ Route::prefix('sicici')->group(function () {
             Route::delete('/delete/{id}', 'deletePenugasan');
         });
     });
+    Route::prefix('komponen')->controller(KomponenController::class)->group(function () {
+        Route::get('/', 'getAllData');
+        Route::post('/create', 'createData');
+        Route::get('/get/{id}', 'getDataById');
+        Route::post('/update/{id}', 'updateData');
+        Route::delete('/delete/{id}', 'deleteData');
+    });
 });
+
+
