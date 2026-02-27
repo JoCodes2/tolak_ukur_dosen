@@ -36,7 +36,9 @@ $(document).ready(function () {
     $('#btnTambahPenugasan').on('click', function () {
         $('#formPenugasan')[0].reset();
         $('.select2-modal').val('').trigger('change');
-
+        $('#formPenugasan .form-control').removeClass('is-valid is-invalid');
+        $('.text-danger').text('');
+        $('.error-msg').text('');
         detail.loadDropdownPenugasan();
 
         $('#modalPenugasan').modal('show');
@@ -55,11 +57,18 @@ $(document).ready(function () {
             errorElement: 'small',
             errorPlacement: function (error, element) {
                 error.addClass('text-danger');
-                if (element.hasClass('select2-hidden-accessible')) {
-                    error.insertAfter(element.next('.select2-container'));
+                const errorId = '#error-' + element.attr('name');
+                if ($(errorId).length) {
+                    $(errorId).html(error);
                 } else {
                     error.insertAfter(element);
                 }
+            },
+            highlight: function (element) {
+                $(element).addClass('is-invalid').removeClass('is-valid');
+            },
+            unhighlight: function (element) {
+                $(element).removeClass('is-invalid').addClass('is-valid');
             }
         });
     }

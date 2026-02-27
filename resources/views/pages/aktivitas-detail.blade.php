@@ -112,11 +112,11 @@
         <x-base-form id="formPenugasan">
             <div class="mb-3">
                 <label class="form-label">Mata Kuliah <span class="text-danger">*</span></label>
-                <select name="id_mk" id="id_mk" class="form-select select2-modal"></select>
+                <select name="id_mk" id="id_mk" class="form-select form-control select2-modal"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Dosen Pengajar <span class="text-danger">*</span></label>
-                <select name="id_dosen" id="id_dosen" class="form-select select2-modal"></select>
+                <select name="id_dosen" id="id_dosen" class="form-select form-control select2-modal"></select>
             </div>
         </x-base-form>
         <x-slot name="footer">

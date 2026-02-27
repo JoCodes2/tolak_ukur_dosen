@@ -136,10 +136,11 @@ Route::prefix('sicici')->group(function () {
         });
 
         // Detail Mengajar (Dosen & MK)
-        Route::prefix('pengajar')->controller(AktivitasMengajarController::class)->group(function () {
-            Route::get('/{id_aktivitas}', 'getPengajar');
+        Route::prefix('penugasan')->controller(AktivitasMengajarController::class)->group(function () {
+            Route::get('/master-dropdown', 'getDropdownMaster');
+            Route::get('/{id_aktivitas}', 'getMengajarByAktivitas');
             Route::post('/store', 'storePenugasan');
-            Route::delete('/delete/{id}', 'deleteData');
+            Route::delete('/delete/{id}', 'deletePenugasan');
         });
     });
 });

@@ -170,76 +170,130 @@ class AktivitasDetailService {
         );
     }
 
-    // --- TABEL & CRUD PENGAJAR ---
     async getPengajar(id) {
         if (!$.fn.dataTable.isDataTable(this.tableMengajar)) {
             this.tableMengajar.DataTable({
                 pageLength: 10,
                 responsive: true,
+                drawCallback: function () {
+                    $.fn.dataTable.ext.errMode = 'throw';
+                },
                 language: {
                     emptyTable: this.getEmptyTemplate(
                         'fa-book-open-reader',
                         'Belum Ada Penugasan Dosen',
-                        'Sistem belum menemukan plotting mata kuliah atau dosen pengajar untuk aktivitas ini. Silakan tekan tombol <strong>Tambah Penugasan</strong> untuk mulai mengatur jadwal mengajar.'
+                        'Sistem belum menemukan plotting mata kuliah atau dosen pengajar untuk aktivitas ini.'
                     )
                 }
             });
         }
+
         const dt = this.tableMengajar.DataTable();
         dt.clear();
+
         try {
-            const response = await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/pengajar/${id}`, 'GET');
+            const response = await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/penugasan/${id}`, 'GET');
+
             (response.data ?? []).forEach((item, index) => {
                 dt.row.add([
-                    index + 1, item.mata_kuliah?.kode_mk, item.mata_kuliah?.nama_mk,
-                    `${item.mata_kuliah?.sks} SKS`, item.dosen?.name,
-                    `<button class="btn btn-outline-danger btn-sm btnHapusPengajar" data-id="${item.id}"><i class="fa fa-trash"></i></button>`
+                    index + 1,
+                    item.mata_kuliah?.kode_mk ?? '-',
+                    item.mata_kuliah?.nama_mk ?? '-',
+                    `${item.mata_kuliah?.sks ?? 0} SKS`,
+                    item.dosen?.nama ?? '-', // Diubah dari .name ke .nama sesuai skema DB Anda
+                    `<button class="btn btn-outline-danger btn-sm btnHapusPengajar" data-id="${item.id}" data-aktivitas="${id}">
+                        <i class="fa fa-trash"></i>
+                    </button>`
                 ]);
             });
             dt.draw();
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error("Gagal memuat data pengajar:", e);
+        }
     }
 
     async loadDropdownPenugasan() {
         try {
-            const [mk, dosen] = await Promise.all([
-                this.ajaxRequest(`${appUrl}/sicici/matakuliah`, 'GET'),
-                this.ajaxRequest(`${appUrl}/sicici/user`, 'GET')
-            ]);
-            this.populateSelect('#id_mk', mk.data, 'nama_mk', 'kode_mk');
-            this.populateSelect('#id_dosen', dosen.data, 'name');
-        } catch (e) { console.error("Gagal load dropdown"); }
+            const response = await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/penugasan/master-dropdown`, 'GET');
+            const { mata_kuliah, dosen } = response.data;
+
+            this.populateSelect('#id_mk', mata_kuliah, 'nama_mk', 'kode_mk');
+            this.populateSelect('#id_dosen', dosen, 'nama');
+        } catch (e) {
+            console.error("Gagal load dropdown:", e);
+        }
     }
 
     async storePenugasan(idAktivitas, form) {
+        const submitButton = $('#btnSimpanPenugasan');
+        const originalText = submitButton.html();
+
         try {
             loadingAllert('Menyimpan...');
-            const formData = new FormData(form);
-            formData.append('id_aktivitas', idAktivitas);
-            await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/pengajar/store`, 'POST', formData);
-            Swal.close(); successAlert("Penugasan disimpan");
+            const data = {
+                id_aktivitas: idAktivitas,
+                id_mk: $('#id_mk').val(),
+                id_dosen: $('#id_dosen').val(),
+            };
+
+            let response = await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/penugasan/store`, 'POST', data);
+            console.log(response);
+
+            Swal.close();
+            successAlert("Penugasan berhasil disimpan");
             $('#modalPenugasan').modal('hide');
+            form.reset();
+            $('.select2-modal').val('').trigger('change');
+
             this.getPengajar(idAktivitas);
-        } catch (e) { Swal.close(); errorAlert("Gagal menyimpan"); }
+        } catch (error) {
+            Swal.close();
+            submitButton.attr('disabled', false).html(originalText);
+
+            const status = error.status || error.responseJSON?.code;
+            const message = error.responseJSON?.message;
+
+            if (status === 422) {
+                warningAlert('Periksa inputan anda');
+                const errors = error.responseJSON?.data ?? error.responseJSON?.errors;
+                const validator = $('#formPenugasan').validate();
+                const errorList = {};
+                $.each(errors, function (field, messages) {
+                    errorList[field] = messages[0];
+                });
+                validator.showErrors(errorList);
+            } else if (status === 400) {
+                warningAlert(message || 'Permintaan tidak valid');
+            } else if (status === 409) {
+                warningAlert('Data sudah ada dalam sistem!');
+            } else {
+                errorAlert(message || "Terjadi kesalahan sistem");
+            }
+        }
     }
 
     async deletePengajar(id, aktivitasId) {
         confirmAlert("Hapus penugasan dosen?", async () => {
             try {
                 loadingAllert('Menghapus...');
-                await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/pengajar/delete/${id}`, 'DELETE');
-                Swal.close(); successAlert("Dihapus"); this.getPengajar(aktivitasId);
-            } catch (e) { Swal.close(); errorAlert("Gagal"); }
+                await this.ajaxRequest(`${appUrl}/sicici/aktivitas-perkuliahan/penugasan/delete/${id}`, 'DELETE');
+                Swal.close();
+                successAlert("Penugasan berhasil dihapus");
+                this.getPengajar(aktivitasId);
+            } catch (e) {
+                Swal.close();
+                errorAlert("Gagal menghapus data");
+            }
         });
     }
 
-    // --- HELPER ---
     populateSelect(selector, data, label, subLabel = null) {
         let html = '<option value="">-- Pilih --</option>';
-        data.forEach(i => { html += `<option value="${i.id}">${subLabel ? `[${i[subLabel]}] ` : ''}${i[label]}</option>`; });
+        (data ?? []).forEach(i => {
+            html += `<option value="${i.id}">${i[subLabel] ? `[${i[subLabel]}] ` : ''}${i[label]}</option>`;
+        });
         $(selector).html(html);
     }
-
     getEmptyTemplate(icon, title, msg) {
         return `
         <div class="py-5 text-center">
