@@ -26,6 +26,9 @@ $(document).ready(function () {
                 },
                 angkatan: {
                     required: true
+                },
+                id_prodi: {
+                    required: true
                 }
             },
             messages: {
@@ -38,6 +41,9 @@ $(document).ready(function () {
                 angkatan: {
                     required: "Angkatan wajib diisi"
                 },
+                id_prodi: {
+                    required: "Program Studi wajib diisi"
+                }
             },
             errorElement: 'small',
             errorPlacement: function (error, element) {

@@ -33,6 +33,7 @@ class MahasiswaRequest extends FormRequest
             ],
             'nama' => 'required',
             'angkatan' => 'required',
+            'id_prodi' => 'required',
         ];
     }
 
@@ -46,6 +47,8 @@ class MahasiswaRequest extends FormRequest
             'nama.required' => 'Nama wajib diisi.',
 
             'angkatan.required' => 'Angkatan wajib diisi.',
+
+            'id_prodi.required' => 'Program Studi wajib diisi.',
         ];
     }
     protected function failedValidation(Validator $validator)
