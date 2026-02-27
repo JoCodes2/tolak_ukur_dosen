@@ -5,6 +5,7 @@ use App\Http\Controllers\CMS\AktivitasMengajarController;
 use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
 use App\Http\Controllers\CMS\AktivitasPesertaController;
 use App\Http\Controllers\CMS\KelasController;
+use App\Http\Controllers\CMS\KontrakPerkuliahanController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
 use App\Http\Controllers\CMS\PeriodeController;
@@ -142,5 +143,12 @@ Route::prefix('sicici')->group(function () {
             Route::post('/store', 'storePenugasan');
             Route::delete('/delete/{id}', 'deletePenugasan');
         });
+    });
+    // kontrak perkuliahan
+    Route::prefix('kontrak-perkuliahan')->controller(KontrakPerkuliahanController::class)->group(function () {
+        Route::get('/komponen-tersedia/{idMengajarDetail}', 'getKomponen');
+        Route::get('/bobot/{idMengajarDetail}', 'getBobot');
+        Route::post('/sync/{idMengajarDetail}', 'syncKomponen');
+        Route::post('/store', 'storeBobot');
     });
 });
