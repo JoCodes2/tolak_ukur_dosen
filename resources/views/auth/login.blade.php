@@ -185,13 +185,13 @@
         <!-- BRANDING -->
         <div class="branding-section">
             <div class="text-center">
-                <img src="{{ asset('assets/img/logo-kampus.png') }}" class="brand-logo">
+                <img src="{{ asset('assets/assets/img/20241107_171817.jpg') }}" class="brand-logo">
                 <h1 class="brand-title">Sistem Tolak Ukur Dosen</h1>
                 <p class="brand-subtitle">
                     Platform Monitoring & Evaluasi Kinerja Dosen
                     untuk Mendukung Mutu Akademik dan Akreditasi Institusi.
                 </p>
-                <img src="{{ asset('assets/img/ilustrasi-akademik.jpg') }}" class="brand-image">
+                <img src="{{ asset('assets/assets/img/stmikadhigunaicon.svg') }}" class="brand-image">
             </div>
         </div>
 
