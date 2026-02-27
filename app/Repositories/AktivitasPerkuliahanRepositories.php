@@ -6,6 +6,8 @@ use App\Http\Requests\AktivitasPerkuliahanRequest;
 use App\Interfaces\AktivitasPerkuliahanInterfaces;
 use App\Models\AktivitasPerkuliahanModel;
 use App\Traits\HttpResponseTraits;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AktivitasPerkuliahanRepositories implements AktivitasPerkuliahanInterfaces
 {
@@ -20,14 +22,21 @@ class AktivitasPerkuliahanRepositories implements AktivitasPerkuliahanInterfaces
 
     public function getAllData()
     {
-        $data = $this->aktivitasPerkuliahan->with(['periode', 'prodi', 'kelas'])
-            ->withCount([
-                'mengajarDetail as total_dosen',
-                'pesertaDetail as total_mahasiswa'
-            ])
-            ->latest()
-            ->get();
+        $user = Auth::user();
 
+        $query = $this->aktivitasPerkuliahan->with(['periode', 'prodi', 'kelas'])
+            ->withCount([
+                'mengajarDetail as total_dosen' => function ($query) {
+                    $query->select(DB::raw('count(distinct(id_dosen))'));
+                },
+                'pesertaDetail as total_mahasiswa'
+            ]);
+
+        if ($user->role === 'prodi') {
+            $query->where('id_prodi', $user->id_prodi);
+        }
+
+        $data = $query->latest()->get();
 
         if ($data->isEmpty()) {
             return $this->dataNotFound();
