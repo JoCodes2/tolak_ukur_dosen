@@ -77,25 +77,31 @@
         </div>
     </div>
 
-    <x-base-modal id="modalKolektifMahasiswa" title="Pilih Mahasiswa Kolektif" size="lg">
-        <div class="alert alert-info border-0 shadow-none d-flex align-items-center mb-3" style="background-color: #e8fadf;">
-            <i class="fa-solid fa-circle-info me-2 text-info"></i>
-            <div class="text-dark small">
-                Mahasiswa yang tampil adalah yang berada pada prodi <strong id="detail-prodi-modal">...</strong> dan belum masuk di kelas ini.
+    <x-base-modal id="modalKolektifMahasiswa" title="Tambah Peserta Dalam Kelas Ini" size="xl">
+        <form id="formKolektifMahasiswa">
+            @csrf
+            <div class="alert alert-info border-0 shadow-none d-flex align-items-center mb-3" style="background-color: #e8fadf;">
+                <i class="fa-solid fa-circle-info me-2 text-info"></i>
+                <div class="text-dark small">
+                    Mahasiswa yang tampil adalah yang berada pada prodi <strong id="detail-prodi-modal">...</strong> dan belum masuk di kelas ini.
+                </div>
             </div>
-        </div>
-        <div class="table-responsive border rounded">
-            <table class="table table-hover mb-0" id="tablePilihMahasiswa">
-                <thead class="table-light">
-                    <tr>
-                        <th width="40"><input type="checkbox" id="checkAllMhs" class="form-check-input"></th>
-                        <th>NIM</th>
-                        <th>Nama Mahasiswa</th>
-                    </tr>
-                </thead>
-                <tbody id="bodyPilihMahasiswa"></tbody>
-            </table>
-        </div>
+
+            <div class="table-responsive border rounded">
+                <table class="table table-hover mb-0" id="tablePilihMahasiswa">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="40"><input type="checkbox" id="checkAllMhs" class="form-check-input"></th>
+                            <th>NIM</th>
+                            <th>Nama Mahasiswa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyPilihMahasiswa">
+                        </tbody>
+                </table>
+            </div>
+        </form>
+
         <x-slot name="footer">
             <x-base-button variant="secondary" data-bs-dismiss="modal" text="Tutup" />
             <x-base-button id="btnSimpanKolektif" variant="primary" text="Tambahkan Mahasiswa" icon="fa-solid fa-save" />
@@ -106,11 +112,11 @@
         <x-base-form id="formPenugasan">
             <div class="mb-3">
                 <label class="form-label">Mata Kuliah <span class="text-danger">*</span></label>
-                <select name="id_mk" id="id_mk" class="form-select select2-modal"></select>
+                <select name="id_mk" id="id_mk" class="form-select form-control select2-modal"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Dosen Pengajar <span class="text-danger">*</span></label>
-                <select name="id_dosen" id="id_dosen" class="form-select select2-modal"></select>
+                <select name="id_dosen" id="id_dosen" class="form-select form-control select2-modal"></select>
             </div>
         </x-base-form>
         <x-slot name="footer">
