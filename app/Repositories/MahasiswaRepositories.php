@@ -18,7 +18,7 @@ class MahasiswaRepositories implements MahasiswaInterfaces
     }
     public function getAllData()
     {
-        $data = $this->MahasiswaModel->all();
+        $data = $this->MahasiswaModel->with('prodi')->get();
 
         if ($data->isEmpty()) {
             return $this->dataNotFound();
@@ -44,7 +44,7 @@ class MahasiswaRepositories implements MahasiswaInterfaces
     }
     public function getDataById($id)
     {
-        $data = $this->MahasiswaModel->find($id);
+        $data = $this->MahasiswaModel->with('prodi')->find($id);
         if (!$data) {
             return $this->idOrDataNotFound();
         }
