@@ -10,6 +10,7 @@ use App\Http\Controllers\CMS\KontrakPerkuliahanController;
 use App\Http\Controllers\CMS\KomponenController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
+use App\Http\Controllers\CMS\NilaiMahasiswaController;
 use App\Http\Controllers\CMS\PeriodeController;
 use App\Http\Controllers\CMS\ProdiController;
 use App\Http\Controllers\CMS\UserController;
@@ -178,5 +179,12 @@ Route::prefix('sicici')->group(function () {
         Route::get('/get/{id}', 'getDataById');
         Route::post('/update/{id}', 'updateData');
         Route::delete('/delete/{id}', 'deleteData');
+    });
+    // Nilai Mahasiswa
+    Route::prefix('penilaian-mahasiswa')->controller(NilaiMahasiswaController::class)->group(function () {
+        Route::get('/daftar-mengajar', 'getDaftarMengajarDosen');
+        Route::get('/detail-kelas/{idMengajarDetail}', 'getDetailPenilaianKelas');
+        Route::post('/simpan', 'simpanNilaiMahasiswa');
+        Route::post('/finalisasi/{idMengajarDetail}', 'finalisasiNilai');
     });
 });
