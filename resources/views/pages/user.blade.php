@@ -66,6 +66,9 @@
                 <label for="id_prodi" class="form-label">Program Studi <span class="text-danger">*</span></label>
                 <select class="form-select select2" id="id_prodi" name="id_prodi">
                     <option value="">-- Pilih Program Studi --</option>
+                    @foreach ($prodi as $item)
+                        <option value="{{ $item->id }}">{{ $item->nama_prodi }}</option>
+                    @endforeach
                 </select>
                 <small class="text-muted">Tentukan prodi jika pengguna menjabat sebagai Kaprodi.</small>
             </div>

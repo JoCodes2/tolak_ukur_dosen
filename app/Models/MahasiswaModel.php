@@ -11,10 +11,10 @@ class MahasiswaModel extends Model
 {
     use HasUuids, HasFactory;
     protected $table = 'mahasiswa';
-    protected $fillable = ['id', 'nim', 'nama', 'angkatan', 'prodi_id', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'nim', 'nama', 'angkatan', 'id_prodi', 'created_at', 'updated_at'];
 
     public function prodi(): BelongsTo
     {
-        return $this->belongsTo(ProdiModel::class, 'prodi_id', 'id');
+        return $this->belongsTo(ProdiModel::class, 'id_prodi', 'id');
     }
 }

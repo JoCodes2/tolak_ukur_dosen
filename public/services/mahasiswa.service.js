@@ -30,13 +30,13 @@ class MahasiswaService {
 
     async getAllData() {
 
-    // Inisialisasi DataTable sekali saja
-    if (!$.fn.dataTable.isDataTable(this.table)) {
-        this.table.DataTable({
-            pageLength: 10,
-            responsive: true,
-            language: {
-                emptyTable: `
+        // Inisialisasi DataTable sekali saja
+        if (!$.fn.dataTable.isDataTable(this.table)) {
+            this.table.DataTable({
+                pageLength: 10,
+                responsive: true,
+                language: {
+                    emptyTable: `
                     <div class="py-5 text-center">
                         <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
                              style="width: 90px; height: 90px; background-color: #e8ebff;">
@@ -50,25 +50,25 @@ class MahasiswaService {
                             untuk mulai mengisi data master.
                         </p>
                     </div>`
-            }
-        });
-    }
-
-    const datatable = this.table.DataTable();
-    datatable.clear();
-
-    try {
-        const response = await this.ajaxRequest(`${appUrl}/sicici/mahasiswa/`, 'GET');
-        const mahasiswaData = response?.data ?? [];
-
-        if (!mahasiswaData.length) {
-            datatable.draw();
-            return;
+                }
+            });
         }
 
-        mahasiswaData.forEach((item, index) => {
+        const datatable = this.table.DataTable();
+        datatable.clear();
 
-            const actions = `
+        try {
+            const response = await this.ajaxRequest(`${appUrl}/sicici/mahasiswa/`, 'GET');
+            const mahasiswaData = response?.data ?? [];
+
+            if (!mahasiswaData.length) {
+                datatable.draw();
+                return;
+            }
+
+            mahasiswaData.forEach((item, index) => {
+
+                const actions = `
                 <div class="d-flex justify-content-center gap-2">
                     <button class="btn btn-outline-info btn-sm btnEditMahasiswa"
                             data-id="${item.id}" title="Edit">
@@ -80,21 +80,22 @@ class MahasiswaService {
                     </button>
                 </div>`;
 
-            datatable.row.add([
-                index + 1,
-                item.nim ?? '-',
-                item.nama ?? '-',
-                item.angkatan ?? '-',
-                actions
-            ]);
-        });
+                datatable.row.add([
+                    index + 1,
+                    item.nim ?? '-',
+                    item.nama ?? '-',
+                    item.angkatan ?? '-',
+                    item.prodi?.nama_prodi ?? '-',
+                    actions
+                ]);
+            });
 
-        datatable.draw();
+            datatable.draw();
 
-    } catch (error) {
-        console.error('Gagal memuat data mahasiswa:', error);
+        } catch (error) {
+            console.error('Gagal memuat data mahasiswa:', error);
+        }
     }
-}
 
     async upsertData(formElement, checkingEdit) {
         const submitButton = $('#btnProsesKelas');
@@ -147,10 +148,13 @@ class MahasiswaService {
             const responseData = await this.ajaxRequest(`${appUrl}/sicici/mahasiswa/get/${id}`, 'GET');
             const item = responseData.data;
             Swal.close();
+            console.log(responseData);
+
             $('#mahasiswa_id').val(item.id);
             $('#nim').val(item.nim);
             $('#nama').val(item.nama);
             $('#angkatan').val(item.angkatan);
+            $('#id_prodi').val(item.id_prodi);
 
             $('#modalInputMahasiswa').modal('show');
 

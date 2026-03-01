@@ -1,7 +1,9 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo py-3">
-        <a href="/home" class="app-brand-link d-flex align-items-center text-decoration-none">
-            <span class="app-brand-logo demo bg-white shadow-sm p-2 rounded-3 d-flex align-items-center justify-content-center">
+        <a href="{{ url('https://stmikadhiguna.ac.id/') }}" target="_blank"
+            class="app-brand-link d-flex align-items-center text-decoration-none">
+            <span
+                class="app-brand-logo demo bg-white shadow-sm p-2 rounded-3 d-flex align-items-center justify-content-center">
                 <img src="{{ asset('assets/assets/img/stmikadhigunaicon.svg') }}" alt="Logo" class="img-fluid"
                     style="width: 38px; height: 38px; object-fit: contain;">
             </span>
@@ -64,6 +66,14 @@
                 <div data-i18n="Aktivitas">Aktivitas Perkuliahan</div>
             </a>
         </li>
+
+        <li class="menu-item {{ request()->is('komponen*') ? 'active' : '' }}">
+            <a href="/komponen" class="menu-link">
+                <i class="menu-icon fa-solid fa-book"></i>
+                <div data-i18n="Aktivitas">Komponen MK</div>
+            </a>
+        </li>
+
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pengajaran & Penilaian</span>

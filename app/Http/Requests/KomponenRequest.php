@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class MahasiswaRequest extends FormRequest
+class KomponenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,19 +21,15 @@ class MahasiswaRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
+
     public function rules(): array
     {
-        $id = $this->route('id') ?? $this->input('id');
-
         return [
-
-            'nim' => [
-                'required',
-                $id ? 'unique:mahasiswa,nim,' . $id : 'unique:mahasiswa,nim',
-            ],
-            'nama' => 'required',
-            'angkatan' => 'required',
-            'id_prodi' => 'required',
+            'id_prodi'      => 'required|exists:program_studi,id',
+            'id_mk'         => 'required|exists:mata_kuliah,id',
+            'id_periode'    => 'required|exists:periode,id',
+            'nama_komponen' => 'required|string|max:255',
         ];
     }
 
@@ -41,14 +37,18 @@ class MahasiswaRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nim.required' => 'NIM wajib diisi.',
-            'nim.unique'   => 'NIM sudah terdaftar, silakan gunakan NIM lain.',
+            'id_prodi.required' => 'Program studi wajib dipilih.',
+            'id_prodi.exists' => 'Program studi tidak ditemukan.',
 
-            'nama.required' => 'Nama wajib diisi.',
+            'id_mk.required' => 'Mata kuliah wajib dipilih.',
+            'id_mk.exists' => 'Mata kuliah tidak ditemukan.',
 
-            'angkatan.required' => 'Angkatan wajib diisi.',
+            'id_periode.required' => 'Periode wajib dipilih.',
+            'id_periode.exists' => 'Periode tidak ditemukan.',
 
-            'id_prodi.required' => 'Program Studi wajib diisi.',
+            'nama_komponen.required' => 'Nama komponen wajib diisi.',
+            'nama_komponen.string' => 'Nama komponen harus berupa teks.',
+            'nama_komponen.max' => 'Nama komponen maksimal 255 karakter.',
         ];
     }
     protected function failedValidation(Validator $validator)

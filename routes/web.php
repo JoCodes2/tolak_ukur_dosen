@@ -4,13 +4,16 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CMS\AktivitasMengajarController;
 use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
 use App\Http\Controllers\CMS\AktivitasPesertaController;
+use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\KelasController;
 use App\Http\Controllers\CMS\KontrakPerkuliahanController;
+use App\Http\Controllers\CMS\KomponenController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
 use App\Http\Controllers\CMS\PeriodeController;
 use App\Http\Controllers\CMS\ProdiController;
 use App\Http\Controllers\CMS\UserController;
+use App\Models\ProdiModel;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,9 +26,7 @@ Route::post('sicici/login', [LoginController::class, 'login']);
 
 Route::middleware(['auth', 'web'])->group(function () {
     // route admin
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    });
+    Route::get('/', [DashboardController::class, 'index']);
 
     // pages master data
     Route::get('/prodi', function () {
@@ -35,7 +36,8 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.kelas');
     });
     Route::get('/mahasiswa', function () {
-        return view('pages.mahasiswa');
+        $prodi = ProdiModel::all();
+        return view('pages.mahasiswa', compact('prodi'));
     });
     Route::get('/periode', function () {
         return view('pages.periode');
@@ -46,7 +48,18 @@ Route::middleware(['auth', 'web'])->group(function () {
 
     // pages  management pengguna dan dosen
     Route::get('/user', function () {
-        return view('pages.user');
+        $prodi = ProdiModel::all();
+        return view('pages.user', compact('prodi'));
+    });
+
+    //  Route::get('/user', function () {
+    //     return view('pages.user');
+    // });
+
+
+    // pages komponen
+    Route::get('/komponen', function () {
+        return view('pages.komponen');
     });
 
     // pages aktivitas perkuliahan
@@ -158,5 +171,12 @@ Route::prefix('sicici')->group(function () {
         Route::get('/bobot/{idMengajarDetail}', 'getBobot');
         Route::post('/sync/{idMengajarDetail}', 'syncKomponen');
         Route::post('/store', 'storeBobot');
+    });
+    Route::prefix('komponen')->controller(KomponenController::class)->group(function () {
+        Route::get('/', 'getAllData');
+        Route::post('/create', 'createData');
+        Route::get('/get/{id}', 'getDataById');
+        Route::post('/update/{id}', 'updateData');
+        Route::delete('/delete/{id}', 'deleteData');
     });
 });

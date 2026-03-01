@@ -18,7 +18,7 @@
             </div>
 
             @php
-                $headers = ['No', 'Nama', 'NIM', 'Angkatan', 'Aksi'];
+                $headers = ['No', 'NIM', 'Nama', 'Angkatan', 'Program Studi', 'Aksi'];
             @endphp
 
             <x-base-table :headers="$headers" id="mahasiswaTable">
@@ -61,7 +61,22 @@
                     min="2000" max="{{ date('Y') }}">
                 <small id="error-angkatan" class="error-msg text-danger"></small>
             </div>
+
+            {{-- Program Studi --}}
+            <div class="col-12 mb-3">
+                <label for="id_prodi" class="form-label">
+                    Program Studi <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" id="id_prodi" name="id_prodi">
+                    <option value="">Pilih Program Studi</option>
+                    @foreach ($prodi as $item)
+                        <option value="{{ $item->id }}">{{ $item->nama_prodi }}</option>
+                    @endforeach
+                </select>
+                <small id="error-id_prodi" class="error-msg text-danger"></small>
+            </div>
         </x-base-form>
+
 
         <x-slot name="footer">
             <x-base-button variant="secondary" data-bs-dismiss="modal" text="Batal" />
