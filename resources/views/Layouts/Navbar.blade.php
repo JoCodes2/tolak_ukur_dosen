@@ -21,7 +21,7 @@ id="layout-navbar"
             <div class="">
                 <span class="fw-bold text-nowrap">
                     @auth
-                        {{ auth()->user()->name }}
+                        {{ auth()->user()->nama }}
                     @endauth
                 </span>
                 <span class="px-2">|</span>

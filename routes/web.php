@@ -6,9 +6,11 @@ use App\Http\Controllers\CMS\AktivitasPerkuliahanController;
 use App\Http\Controllers\CMS\AktivitasPesertaController;
 use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\KelasController;
+use App\Http\Controllers\CMS\KontrakPerkuliahanController;
 use App\Http\Controllers\CMS\KomponenController;
 use App\Http\Controllers\CMS\MahasiswaController;
 use App\Http\Controllers\CMS\MataKuliahController;
+use App\Http\Controllers\CMS\NilaiMahasiswaController;
 use App\Http\Controllers\CMS\PeriodeController;
 use App\Http\Controllers\CMS\ProdiController;
 use App\Http\Controllers\CMS\UserController;
@@ -51,15 +53,9 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.user', compact('prodi'));
     });
 
-    //  Route::get('/user', function () {
-    //     return view('pages.user');
-    // });
-
-    
     // pages komponen
     Route::get('/komponen', function () {
         return view('pages.komponen');
-
     });
 
     // pages aktivitas perkuliahan
@@ -67,14 +63,29 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.aktivitas-perkuliahan');
     });
 
-    // pages aktivitas perkuliahan
     Route::get('/aktivitas-perkuliahan', function () {
         return view('pages.aktivitas-perkuliahan');
     });
-
     Route::get('/aktivitas-perkuliahan/detail/{id}', function ($id) {
         return view('pages.aktivitas-detail', ['id_aktivitas' => $id]);
     })->name('aktivitas.detail');
+
+    // kontrak perkuliahan dan penilaian
+    Route::get('/kontrak-perkuliahan', function () {
+        return view('pages.kontrak-perkuliahan');
+    });
+    Route::get('/kontrak-perkuliahan/detail/{id}', function ($id) {
+        return view('pages.kontrak-perkuliahan-detail', ['id' => $id]);
+    });
+
+    // penialain mahasiswa
+    Route::get('/penilaian-mahasiswa', function () {
+        return view('pages.penilaian-mahasiswa');
+    });
+    Route::get('/penilaian-mahasiswa/detail/{id}', function ($id) {
+        return view('pages.detail-penilaian-mahasiswa', ['id' => $id]);
+    });
+
     Route::post('sicici/logout', [LoginController::class, 'logout']);
 });
 
@@ -157,6 +168,14 @@ Route::prefix('sicici')->group(function () {
             Route::delete('/delete/{id}', 'deletePenugasan');
         });
     });
+    // kontrak perkuliahan
+    Route::prefix('kontrak-perkuliahan')->controller(KontrakPerkuliahanController::class)->group(function () {
+        Route::get('/data', 'getAllData');
+        Route::get('/komponen-tersedia/{idMengajarDetail}', 'getKomponen');
+        Route::get('/bobot/{idMengajarDetail}', 'getBobot');
+        Route::post('/sync/{idMengajarDetail}', 'syncKomponen');
+        Route::post('/store', 'storeBobot');
+    });
     Route::prefix('komponen')->controller(KomponenController::class)->group(function () {
         Route::get('/', 'getAllData');
         Route::post('/create', 'createData');
@@ -164,6 +183,11 @@ Route::prefix('sicici')->group(function () {
         Route::post('/update/{id}', 'updateData');
         Route::delete('/delete/{id}', 'deleteData');
     });
+    // Nilai Mahasiswa
+    Route::prefix('penilaian-mahasiswa')->controller(NilaiMahasiswaController::class)->group(function () {
+        Route::get('/daftar-mengajar', 'getDaftarMengajarDosen');
+        Route::get('/detail-kelas/{idMengajarDetail}', 'getDetailPenilaianKelas');
+        Route::post('/simpan', 'simpanNilaiMahasiswa');
+        Route::post('/finalisasi/{idMengajarDetail}', 'finalisasiNilai');
+    });
 });
-
-

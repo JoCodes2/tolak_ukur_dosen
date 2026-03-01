@@ -27,10 +27,10 @@ class MasterDataSeeder extends Seeder
             ['id' => Str::uuid(), 'nama_kelas' => 'SI 7.1', 'created_at' => now()],
             ['id' => Str::uuid(), 'nama_kelas' => 'SI 7.2', 'created_at' => now()],
         ]);
-
+        $periodeId = Str::uuid();
         DB::table('periode')->insert([
             [
-                'id' => Str::uuid(),
+                'id' => $periodeId,
                 'nama' => 'Ganjil 7 - 2025/2026',
                 'semester' => 7,
                 'tahun_ajaran' => '2025/2026',
@@ -51,14 +51,38 @@ class MasterDataSeeder extends Seeder
             ['id' => Str::uuid(), 'nama' => 'Dr. Dewi Kusumawati, M.Kom', 'email' => 'dewi@stmikadhiguna.ac.id', 'nidn' => '55201704', 'jabatan' => 'Tenaga Pengajar', 'password' => Hash::make('password'), 'role' => 'dosen', 'id_prodi' => null, 'created_at' => now()],
         ]);
 
-        DB::table('mata_kuliah')->insert([
-            ['id' => Str::uuid(),  'kode_mk' => '57201701', 'nama_mk' => 'Keamanan Sistem Informasi', 'sks' => 3, 'created_at' => now()],
-            ['id' => Str::uuid(),  'kode_mk' => '57201702', 'nama_mk' => 'Tata Kelola dan Audit Sistem Informasi', 'sks' => 3, 'created_at' => now()],
-            ['id' => Str::uuid(),  'kode_mk' => '55201701', 'nama_mk' => 'Technoprener ship', 'sks' => 3, 'created_at' => now()],
-            ['id' => Str::uuid(),  'kode_mk' => '55201702', 'nama_mk' => 'Keamanan Sistem Informasi', 'sks' => 3, 'created_at' => now()],
-            ['id' => Str::uuid(),  'kode_mk' => '55201703', 'nama_mk' => 'Testing dan Implementasi Sistem', 'sks' => 3, 'created_at' => now()],
-            ['id' => Str::uuid(),  'kode_mk' => '55201704', 'nama_mk' => 'Sistem Pakar', 'sks' => 3, 'created_at' => now()],
-        ]);
+        // 3. DATA MATA KULIAH (Tanpa id_prodi sesuai struktur Anda)
+        $mataKuliahs = [
+            // SI MK
+            ['id' => Str::uuid(), 'kode_mk' => '57201701', 'nama_mk' => 'Keamanan Sistem Informasi', 'sks' => 3, 'target_prodi' => $prodiSiId],
+            ['id' => Str::uuid(), 'kode_mk' => '57201702', 'nama_mk' => 'Tata Kelola dan Audit Sistem Informasi', 'sks' => 3, 'target_prodi' => $prodiSiId],
+            // TI MK
+            ['id' => Str::uuid(), 'kode_mk' => '55201701', 'nama_mk' => 'Technoprener ship', 'sks' => 3, 'target_prodi' => $prodiTiId],
+            ['id' => Str::uuid(), 'kode_mk' => '55201702', 'nama_mk' => 'Keamanan Sistem Informasi', 'sks' => 3, 'target_prodi' => $prodiTiId],
+            ['id' => Str::uuid(), 'kode_mk' => '55201703', 'nama_mk' => 'Testing dan Implementasi Sistem', 'sks' => 3, 'target_prodi' => $prodiTiId],
+            ['id' => Str::uuid(), 'kode_mk' => '55201704', 'nama_mk' => 'Sistem Pakar', 'sks' => 3, 'target_prodi' => $prodiTiId],
+        ];
+
+        foreach ($mataKuliahs as $mk) {
+            $targetProdi = $mk['target_prodi'];
+            unset($mk['target_prodi']);
+
+            DB::table('mata_kuliah')->insert(array_merge($mk, ['created_at' => now()]));
+
+            $komponens = ['Tugas', 'Aktivitas Partisipatif/Kehadiran', 'Ujian Tengah Semester(UTS)', 'Ujian Akhir Semester(UAS)'];
+
+            foreach ($komponens as $kp) {
+                DB::table('komponen_penilaian_prodi')->insert([
+                    'id' => Str::uuid(),
+                    'id_prodi' => $targetProdi,
+                    'id_mk' => $mk['id'],
+                    'id_periode' => $periodeId,
+                    'nama_komponen' => $kp,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
         // 6. SEED MAHASISWA SI 7.1
         $mahasiswaSI = [
             ['nim' => '5720122001', 'nama' => 'AGUSTINA'],
