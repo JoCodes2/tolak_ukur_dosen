@@ -53,11 +53,6 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.user', compact('prodi'));
     });
 
-    //  Route::get('/user', function () {
-    //     return view('pages.user');
-    // });
-
-
     // pages komponen
     Route::get('/komponen', function () {
         return view('pages.komponen');
@@ -81,6 +76,14 @@ Route::middleware(['auth', 'web'])->group(function () {
     });
     Route::get('/kontrak-perkuliahan/detail/{id}', function ($id) {
         return view('pages.kontrak-perkuliahan-detail', ['id' => $id]);
+    });
+
+    // penialain mahasiswa
+    Route::get('/penilaian-mahasiswa', function () {
+        return view('pages.penilaian-mahasiswa');
+    });
+    Route::get('/penilaian-mahasiswa/detail/{id}', function ($id) {
+        return view('pages.detail-penilaian-mahasiswa', ['id' => $id]);
     });
 
     Route::post('sicici/logout', [LoginController::class, 'logout']);

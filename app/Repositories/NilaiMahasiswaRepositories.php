@@ -8,6 +8,7 @@ use App\Models\BobotPenilaianDosenModel;
 use App\Models\NilaiAkhirMahasiswaModel;
 use App\Models\NilaiMahasiswaModel;
 use App\Traits\HttpResponseTraits;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -32,14 +33,29 @@ class NilaiMahasiswaRepositories implements NilaiMahasiswaInterfaces
         $this->bobotDosen = $bobotDosen;
     }
 
-    public function getDaftarMengajarDosen($idDosen)
+    public function getDaftarMengajarDosen($idDosen = null)
     {
-        $data = $this->mengajarDetail->with([
+        $user = Auth::user();
+        if (!$user) {
+            return $this->error("Unauthorized", 401);
+        }
+
+        $query = $this->mengajarDetail->with([
             'mataKuliah',
             'aktivitas.periode',
             'aktivitas.prodi',
             'aktivitas.kelas'
-        ])->where('id_dosen', $idDosen)->get();
+        ]);
+
+        if ($user->role === 'dosen') {
+            $query->where('id_dosen', $user->id);
+        } elseif ($user->role === 'prodi') {
+            $query->whereHas('aktivitas', function ($q) use ($user) {
+                $q->where('id_prodi', $user->id_prodi);
+            });
+        }
+
+        $data = $query->get();
 
         if ($data->isEmpty()) {
             return $this->dataNotFound();
@@ -47,33 +63,38 @@ class NilaiMahasiswaRepositories implements NilaiMahasiswaInterfaces
 
         return $this->success($data);
     }
-
     public function getDetailPenilaianKelas($idMengajarDetail)
     {
         try {
             $identitas = $this->mengajarDetail->with([
                 'mataKuliah',
+                'dosen',
                 'aktivitas.kelas',
                 'aktivitas.prodi',
                 'aktivitas.periode',
-                'aktivitas.peserta.mahasiswa'
+                'aktivitas.pesertaDetail.mahasiswa'
             ])->findOrFail($idMengajarDetail);
+
+            $pesertaDetail = $identitas->aktivitas->pesertaDetail ?? collect([]);
+
+            $idPesertaList = $pesertaDetail->pluck('id');
 
             $komponenBobot = $this->bobotDosen->with('komponen')
                 ->where('id_mengajar_detail', $idMengajarDetail)
                 ->get();
 
-            $idPesertaList = $identitas->aktivitas->peserta->pluck('id');
-
             $nilaiExisting = $this->nilaiMahasiswa
                 ->whereIn('id_peserta', $idPesertaList)
                 ->get();
 
-            $isFinal = $this->nilaiAkhir
-                ->whereIn('id_peserta', $idPesertaList)
-                ->where('id_mk', $identitas->id_mk)
-                ->where('status', 'final')
-                ->exists();
+            $isFinal = false;
+            if ($idPesertaList->isNotEmpty()) {
+                $isFinal = $this->nilaiAkhir
+                    ->whereIn('id_peserta', $idPesertaList)
+                    ->where('id_mk', $identitas->id_mk)
+                    ->where('status', 'final')
+                    ->exists();
+            }
 
             return $this->success([
                 'identitas' => $identitas,
@@ -82,7 +103,7 @@ class NilaiMahasiswaRepositories implements NilaiMahasiswaInterfaces
                 'is_final' => $isFinal
             ]);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage(), 400);
+            return $this->error("Gagal memuat detail: " . $th->getMessage(), 400);
         }
     }
 
@@ -119,27 +140,55 @@ class NilaiMahasiswaRepositories implements NilaiMahasiswaInterfaces
             return $this->error($th->getMessage(), 400);
         }
     }
-
     public function finalisasiNilai($idMengajarDetail)
     {
         DB::beginTransaction();
         try {
-            $mengajar = $this->mengajarDetail->with('aktivitas.peserta')->findOrFail($idMengajarDetail);
-            $peserta = $mengajar->aktivitas->peserta;
+            $mengajar = $this->mengajarDetail->with([
+                'aktivitas.pesertaDetail.mahasiswa',
+                'bobotPenilaian'
+            ])->findOrFail($idMengajarDetail);
+
+            $peserta = $mengajar->aktivitas->pesertaDetail;
+            $bobotList = $mengajar->bobotPenilaian;
+
+            if (!$bobotList || $bobotList->isEmpty()) {
+                throw new \Exception("Komponen bobot penilaian belum diatur untuk kelas ini.");
+            }
+
+            $idBobots = $bobotList->pluck('id')->toArray();
 
             foreach ($peserta as $p) {
+                $nilaiKomponen = $this->nilaiMahasiswa
+                    ->where('id_peserta', $p->id)
+                    ->whereIn('id_bobot', $idBobots)
+                    ->get();
+
+                $totalAngka = 0;
+                foreach ($bobotList as $b) {
+                    $n = $nilaiKomponen->where('id_bobot', $b->id)->first();
+                    $skor = $n ? (float)$n->nilai : 0;
+                    $totalAngka += ($skor * (float)$b->bobot / 100);
+                }
+
+                $hasil = $this->konversiNilai($totalAngka);
+
                 $this->nilaiAkhir->updateOrCreate(
                     [
                         'id_peserta' => $p->id,
-                        'id_mk' => $mengajar->id_mk
+                        'id_mk'      => $mengajar->id_mk
                     ],
                     [
-                        'id' => Str::uuid(),
-                        'status' => 'final',
-                        'updated_at' => now()
+                        'nilai_angka' => $totalAngka,
+                        'nilai_huruf' => $hasil['huruf'],
+                        'bobot_mutu'  => $hasil['indeks'],
+                        'status'      => 'final',
+                        'updated_at'  => now()
                     ]
                 );
             }
+
+            $mengajar->update(['is_final' => true]);
 
             DB::commit();
             return $this->success(null, "Seluruh nilai kelas ini telah difinalisasi.");
@@ -147,5 +196,17 @@ class NilaiMahasiswaRepositories implements NilaiMahasiswaInterfaces
             DB::rollBack();
             return $this->error($th->getMessage(), 400);
         }
+    }
+    private function konversiNilai($score)
+    {
+        if ($score >= 85) return ['huruf' => 'A',  'indeks' => 4.00];
+        if ($score >= 80) return ['huruf' => 'A-', 'indeks' => 3.75];
+        if ($score >= 75) return ['huruf' => 'B+', 'indeks' => 3.50];
+        if ($score >= 70) return ['huruf' => 'B',  'indeks' => 3.00];
+        if ($score >= 65) return ['huruf' => 'B-', 'indeks' => 2.75];
+        if ($score >= 60) return ['huruf' => 'C+', 'indeks' => 2.50];
+        if ($score >= 55) return ['huruf' => 'C',  'indeks' => 2.00];
+        if ($score >= 50) return ['huruf' => 'D',  'indeks' => 1.00];
+        return ['huruf' => 'E', 'indeks' => 0.00];
     }
 }

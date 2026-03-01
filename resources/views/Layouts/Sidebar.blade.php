@@ -31,6 +31,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner pt-3">
+        {{-- SEMUA ROLE BISA LIHAT DASHBOARD --}}
         <li class="menu-item {{ request()->is('dashboard') || request()->is('/') ? 'active' : '' }}">
             <a href="/" class="menu-link">
                 <i class="menu-icon fa-solid fa-house"></i>
@@ -38,6 +39,8 @@
             </a>
         </li>
 
+        {{-- KHUSUS ADMIN --}}
+        @if(auth()->user()->role === 'admin')
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Master Data</span>
         </li>
@@ -56,7 +59,10 @@
         <li class="menu-item {{ request()->is('periode*') ? 'active' : '' }}">
             <a href="/periode" class="menu-link"><i class="menu-icon fa-solid fa-calendar"></i><div data-i18n="Periode">Periode</div></a>
         </li>
+        @endif
 
+        {{-- ADMIN & PRODI --}}
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'prodi')
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Aktivitas & Monitoring</span>
         </li>
@@ -66,15 +72,16 @@
                 <div data-i18n="Aktivitas">Aktivitas Perkuliahan</div>
             </a>
         </li>
-
         <li class="menu-item {{ request()->is('komponen*') ? 'active' : '' }}">
             <a href="/komponen" class="menu-link">
                 <i class="menu-icon fa-solid fa-book"></i>
                 <div data-i18n="Aktivitas">Komponen MK</div>
             </a>
         </li>
+        @endif
 
-
+        {{-- ADMIN, PRODI, & DOSEN --}}
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'prodi' || auth()->user()->role === 'dosen')
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Pengajaran & Penilaian</span>
         </li>
@@ -86,11 +93,14 @@
         </li>
         <li class="menu-item {{ request()->is('penilaian-mahasiswa*') ? 'active' : '' }}">
             <a href="/penilaian-mahasiswa" class="menu-link">
-                <i class="menu-icon fa-solid fa-star"></i>
+                <i class="menu-icon fa-solid fa-graduation-cap"></i>
                 <div data-i18n="Penilaian">Penilaian Mahasiswa</div>
             </a>
         </li>
+        @endif
 
+        {{-- KHUSUS ADMIN --}}
+        @if(auth()->user()->role === 'admin')
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Akun & Management Pegawai</span>
         </li>
@@ -100,5 +110,6 @@
                 <div data-i18n="User">Manajemen User</div>
             </a>
         </li>
+        @endif
     </ul>
 </aside>
