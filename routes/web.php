@@ -54,14 +54,21 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.aktivitas-perkuliahan');
     });
 
-    // pages aktivitas perkuliahan
     Route::get('/aktivitas-perkuliahan', function () {
         return view('pages.aktivitas-perkuliahan');
     });
-
     Route::get('/aktivitas-perkuliahan/detail/{id}', function ($id) {
         return view('pages.aktivitas-detail', ['id_aktivitas' => $id]);
     })->name('aktivitas.detail');
+
+    // kontrak perkuliahan dan penilaian
+    Route::get('/kontrak-perkuliahan', function () {
+        return view('pages.kontrak-perkuliahan');
+    });
+    Route::get('/kontrak-perkuliahan/detail/{id}', function ($id) {
+        return view('pages.kontrak-perkuliahan-detail', ['id' => $id]);
+    });
+
     Route::post('sicici/logout', [LoginController::class, 'logout']);
 });
 
@@ -146,6 +153,7 @@ Route::prefix('sicici')->group(function () {
     });
     // kontrak perkuliahan
     Route::prefix('kontrak-perkuliahan')->controller(KontrakPerkuliahanController::class)->group(function () {
+        Route::get('/data', 'getAllData');
         Route::get('/komponen-tersedia/{idMengajarDetail}', 'getKomponen');
         Route::get('/bobot/{idMengajarDetail}', 'getBobot');
         Route::post('/sync/{idMengajarDetail}', 'syncKomponen');

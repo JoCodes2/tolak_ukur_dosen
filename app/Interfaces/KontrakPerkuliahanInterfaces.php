@@ -11,4 +11,5 @@ interface KontrakPerkuliahanInterfaces
     public function storeOrUpdateBobot(array $data);
 
     public function syncKomponen($idMengajarDetail);
+    public function getMengajarByDosen();
 }

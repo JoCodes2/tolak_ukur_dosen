@@ -7,6 +7,7 @@ use App\Models\BobotPenilaianDosenModel;
 use App\Models\KomponenPenilaianProdiModel;
 use App\Models\AktivitasMengajarDetailModel;
 use App\Traits\HttpResponseTraits;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -27,23 +28,52 @@ class KontrakPerkuliahanRepositories implements KontrakPerkuliahanInterfaces
         $this->mengajarDetail = $mengajarDetail;
         $this->komponenProdi = $komponenProdi;
     }
-
-    public function getKomponenByMengajar($idMengajarDetail)
+    public function getMengajarByDosen()
     {
         try {
-            $mengajar = $this->mengajarDetail->findOrFail($idMengajarDetail);
-            $aktivitas = $mengajar->aktivitas;
+            $user = Auth::user();
 
-            $data = $this->komponenProdi
-                ->where('id_mk', $mengajar->id_mk)
-                ->where('id_prodi', $aktivitas->id_prodi)
-                ->where('id_periode', $aktivitas->id_periode)
-                ->get();
+            $query = $this->mengajarDetail::with([
+                'aktivitas.periode',
+                'aktivitas.prodi',
+                'aktivitas.kelas',
+                'mataKuliah'
+            ]);
+
+            if ($user->role === 'dosen') {
+                $query->where('id_dosen', $user->id);
+            } else if ($user->role === 'prodi') {
+                $query->whereHas('aktivitas', function ($q) use ($user) {
+                    $q->where('id_prodi', $user->id_prodi);
+                });
+            }
+
+            $data = $query->latest()->get();
 
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), 400);
         }
+    }
+
+    public function getKomponenByMengajar($idMengajarDetail)
+    {
+        $identitas = $this->mengajarDetail->with([
+            'dosen',
+            'mataKuliah',
+            'aktivitas.periode',
+            'aktivitas.prodi',
+            'aktivitas.kelas'
+        ])->findOrFail($idMengajarDetail);
+
+        $bobot = $this->bobotModel->with('komponen')
+            ->where('id_mengajar_detail', $idMengajarDetail)
+            ->get();
+
+        return $this->success([
+            'identitas' => $identitas,
+            'bobot'     => $bobot
+        ]);
     }
 
     public function getBobotByMengajar($idMengajarDetail)
@@ -115,7 +145,11 @@ class KontrakPerkuliahanRepositories implements KontrakPerkuliahanInterfaces
             }
 
             DB::commit();
-            return $this->success(null, "Sinkronisasi komponen berhasil.");
+            $dataBaru = $this->bobotModel->with('komponen')
+                ->where('id_mengajar_detail', $idMengajarDetail)
+                ->get();
+
+            return $this->success($dataBaru, "Sinkronisasi komponen berhasil.");
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->error($th->getMessage(), 400);

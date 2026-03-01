@@ -15,6 +15,10 @@ class KontrakPerkuliahanController extends Controller
     {
         $this->repository = $repository;
     }
+    public function getAllData()
+    {
+        return $this->repository->getMengajarByDosen();
+    }
 
     public function getKomponen($idMengajarDetail)
     {
