@@ -10,7 +10,7 @@
             <span class="app-brand-text ms-3">
                 <div class="lh-1">
                     <span class="fw-bold text-uppercase tracking-wider" style="color: #0026ff; font-size: 1.2rem; letter-spacing: 1px;">
-                        SICICI
+                        SIPEDE
                     </span>
                     <div class="mt-1">
                         <small class="text-muted fw-semibold d-block" style="font-size: 0.65rem; line-height: 1.2;">

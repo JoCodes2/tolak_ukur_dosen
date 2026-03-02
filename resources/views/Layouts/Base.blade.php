@@ -23,7 +23,7 @@
    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
      <link rel="icon" type="image/png" href="{{ asset('assets/assets/img/stmikadhigunaicon.svg') }}" />
-    <title>SICICI - Sistem Monitoring Penilaian Mahasiswa</title>
+    <title>SIPEDE - Sistem Informasi Pengelolaan Data Evaluasi</title>
     @include('Layouts.Styles')
     <script>
         let appUrl = '{{ env('APP_URL') }}';

@@ -8,10 +8,10 @@
             <div class="d-flex align-items-end row">
                 <div class="col-sm-7">
                     <div class="card-body">
-                        <h5 class="card-title text-primary fw-bold">Monitoring SICICI STMIK Adhi Guna 🎓</h5>
+                        <h5 class="card-title text-primary fw-bold">Monitoring SIPEDE STMIK Adhi Guna 🎓</h5>
                         <p class="mb-4">
                             Selamat Datang, <span class="fw-bold">{{ auth()->user()->nama }}</span>. <br>
-                            Anda berada di dashboard sistem monitoring penilaian mahasiswa. Pantau distribusi nilai dan aktivitas pengajaran secara real-time.
+                            Anda berada di dashboard Sistem Informasi Pengelolaan Data Evaluasi. Pantau distribusi nilai dan aktivitas pengajaran secara real-time.
                         </p>
                         <a href="{{ url('/penilaian-mahasiswa') }}" class="btn btn-sm btn-primary shadow-sm">Mulai Penilaian</a>
                     </div>
