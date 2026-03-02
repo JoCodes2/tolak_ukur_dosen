@@ -1,94 +1,59 @@
+
 @extends('Layouts.Base')
 
 @section('content')
 <div class="card">
-    <x-base-header title="Manajemen Pengguna" icon="fa-solid fa-users-gear">
+
+    <x-base-header title="Manajemen Program Studi" icon="fa-solid fa-graduation-cap ">
         <div class="d-flex gap-2">
-            <button type="button" class="btn btn-primary btn-sm" id="btnTambahUser">
-                <i class="fa fa-plus"></i> Tambah Pengguna
+            <button type="button" class="btn btn-primary btn-sm" id="btnTambahProdi">
+                <i class="fa fa-plus"></i> Tambah Program Studi
             </button>
         </div>
     </x-base-header>
 
     <x-base-body>
-        <div class="alert alert-info border-0 small mb-4" style="background-color: #e8ebff; border-left: 5px solid #0026ff;">
-            <i class="fa-solid fa-circle-info me-1" style="color: #0026ff;"></i>
-            Halaman ini digunakan untuk mengelola data Dosen, Admin, dan Kaprodi.
+        <div class="alert alert-info border-0 small mb-4">
+            <i class="fa-solid fa-circle-info me-1"></i>
+            Halaman ini digunakan untuk mengelola data master Program Studi pada STMIK Adhi Guna.
         </div>
 
         @php
-            $headers = ['No', 'NIDN', 'Nama Lengkap', 'Email', 'Role', 'Jabatan', 'Aksi'];
+            $headers = ['No', 'Kode Prodi', 'Nama Program Studi', 'Aksi'];
         @endphp
 
-        <x-base-table :headers="$headers" id="userTable">
-            <tbody id="userBody">
+        <x-base-table :headers="$headers" id="prodiTable">
+            <tbody id="prodiBody">
             </tbody>
         </x-base-table>
     </x-base-body>
 </div>
 
-<x-base-modal id="modalInputUser" title="Form Data Pengguna" size="lg">
-    <x-base-form id="formSimpanUser">
-        <input type="hidden" name="id" id="id_user">
+<x-base-modal id="modalInputProdi" title="Form Program Studi" size="md">
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama lengkap">
-            </div>
+    <x-base-form id="formSimpanProdi">
+        <input type="hidden" name="id" id="id">
 
-            <div class="col-md-6 mb-3">
-                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="contoh@stmikadhiguna.ac.id">
-            </div>
+        <div class="col-12 mb-3">
+            <label for="kode_prodi" class="form-label">Kode Program Studi <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="kode_prodi" name="kode_prodi"
+                   placeholder="Contoh: TI" >
+        </div>
 
-            <div class="col-md-6 mb-3">
-                <label for="nidn" class="form-label">NIDN</label>
-                <input type="text" class="form-control" id="nidn" name="nidn" placeholder="Masukkan NIDN (Khusus Dosen)">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label for="jabatan" class="form-label">Jabatan</label>
-                <input type="text" class="form-control" id="jabatan" name="jabatan" placeholder="Contoh: Lektor Kepala">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label for="role" class="form-label">Hak Akses (Role) <span class="text-danger">*</span></label>
-                <select class="form-select" id="role" name="role">
-                    <option value="">-- Pilih Role --</option>
-                    <option value="prodi">Kaprodi (Program Studi)</option>
-                    <option value="dosen">Dosen</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-
-            <div class="col-md-6 mb-3 d-none" id="container_id_prodi">
-                <label for="id_prodi" class="form-label">Program Studi <span class="text-danger">*</span></label>
-                <select class="form-select select2" id="id_prodi" name="id_prodi">
-                    <option value="">-- Pilih Program Studi --</option>
-                </select>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="********">
-                <small class="text-muted" id="password_note" style="display:none;">Kosongkan jika tidak ingin mengubah password</small>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label for="password_confirmation" class="form-label">Konfirmasi Password <span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="********">
-            </div>
+        <div class="col-12 mb-3">
+            <label for="nama_prodi" class="form-label">Nama Program Studi <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="nama_prodi" name="nama_prodi"
+                   placeholder="Contoh: Teknik Informatika" >
         </div>
     </x-base-form>
 
     <x-slot name="footer">
         <x-base-button variant="secondary" data-bs-dismiss="modal" text="Batal" />
-        <x-base-button id="btnProsesUser" variant="primary" text="Simpan Pengguna" icon="fa-solid fa-save" />
+        <x-base-button id="btnProsesProdi" variant="primary" text="Simpan & Proses" icon="fa-solid fa-save" />
     </x-slot>
 </x-base-modal>
 @endsection
 
 @section('scripts')
-<script type="module" src="{{ asset('controllers/user.controller.js') }}"></script>
+<script type="module" src="{{ asset('controllers/prodi.controller.js') }}"></script>
 @endsection
