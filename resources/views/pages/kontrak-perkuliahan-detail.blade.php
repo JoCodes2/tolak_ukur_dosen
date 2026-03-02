@@ -56,7 +56,7 @@
                 <x-base-body>
                     <div class="alert alert-warning border-0 small mb-4">
                         <i class="fa-solid fa-triangle-exclamation me-1"></i>
-                        Pastikan total bobot berjumlah <strong>100%</strong> agar tombol simpan aktif. Data ini digunakan untuk aktivitas <strong>beri rating</strong>.
+                        Pastikan total bobot berjumlah <strong>100%</strong> agar tombol simpan aktif. Data ini digunakan untuk<strong>Perhitungan Penilaian Mahasiswa</strong>.
                     </div>
 
                     <div class="table-responsive">

@@ -13,7 +13,7 @@
         <x-base-body>
             <div class="alert alert-info border-0 small mb-4">
                 <i class="fa-solid fa-circle-info me-1"></i>
-                Berikut adalah daftar mata kuliah yang Anda ampu. Silakan klik ikon <strong><i class="fa fa-eye"></i> Lihat Detail</strong> untuk mengatur <strong>Bobot Penilaian</strong> (Tugas, UTS, UAS, dll) sebagai bagian dari aktivitas <strong>beri rating</strong> untuk perhitungan CF.
+                Berikut adalah daftar mata kuliah yang Anda ampu. Silakan klik ikon <strong><i class="fa fa-eye"></i> Lihat Detail</strong> untuk mengatur <strong>Bobot Penilaian</strong>Sebagai bagian dari aktivitas <strong>Perkuliahan</strong>
             </div>
 
             @php
